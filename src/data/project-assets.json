@@ -1,0 +1,267 @@
+{
+  "nestle-ptit/overview": {
+    "src": "/projects/nestle-ptit/overview.webp",
+    "width": 1400,
+    "height": 788
+  },
+  "nestle-ptit/cover": {
+    "src": "/projects/nestle-ptit/cover.webp",
+    "width": 902,
+    "height": 632
+  },
+  "nestle-ptit/packaging": {
+    "src": "/projects/nestle-ptit/packaging.webp",
+    "width": 1400,
+    "height": 788
+  },
+  "nestle-ptit/motion": {
+    "src": "/projects/nestle-ptit/motion.webp",
+    "width": 1400,
+    "height": 788
+  },
+  "nestle-ptit/social": {
+    "src": "/projects/nestle-ptit/social.webp",
+    "width": 1400,
+    "height": 788
+  },
+  "milo-erun/overview": {
+    "src": "/projects/milo-erun/overview.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "milo-erun/print": {
+    "src": "/projects/milo-erun/print.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "milo-erun/social": {
+    "src": "/projects/milo-erun/social.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "skinology/overview": {
+    "src": "/projects/skinology/overview.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "skinology/stopmotion": {
+    "src": "/projects/skinology/stopmotion.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "skinology/lifestyle": {
+    "src": "/projects/skinology/lifestyle.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "skinology/steps": {
+    "src": "/projects/skinology/steps.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "ecommerce/overview": {
+    "src": "/projects/ecommerce/overview.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "ecommerce/board-1": {
+    "src": "/projects/ecommerce/board-1.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "ecommerce/board-2": {
+    "src": "/projects/ecommerce/board-2.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "ecommerce/board-3": {
+    "src": "/projects/ecommerce/board-3.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "ecommerce/board-4": {
+    "src": "/projects/ecommerce/board-4.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "ecommerce/board-5": {
+    "src": "/projects/ecommerce/board-5.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "amazon/overview": {
+    "src": "/projects/amazon/overview.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "gerber/overview": {
+    "src": "/projects/gerber/overview.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "gerber/packaging": {
+    "src": "/projects/gerber/packaging.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "gerber/social": {
+    "src": "/projects/gerber/social.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "maggi/overview": {
+    "src": "/projects/maggi/overview.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "maggi/cover": {
+    "src": "/projects/maggi/cover.webp",
+    "width": 900,
+    "height": 900
+  },
+  "maggi/social": {
+    "src": "/projects/maggi/social.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "maggi/food-process": {
+    "src": "/projects/maggi/food-process.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "maggi/food-final": {
+    "src": "/projects/maggi/food-final.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "maggi/banner": {
+    "src": "/projects/maggi/banner.webp",
+    "width": 1200,
+    "height": 500
+  },
+  "maggi/voucher-1": {
+    "src": "/projects/maggi/voucher-1.webp",
+    "width": 1200,
+    "height": 222
+  },
+  "maggi/voucher-2": {
+    "src": "/projects/maggi/voucher-2.webp",
+    "width": 1200,
+    "height": 314
+  },
+  "maggi/voucher-3": {
+    "src": "/projects/maggi/voucher-3.webp",
+    "width": 1200,
+    "height": 180
+  },
+  "maggi/voucher-4": {
+    "src": "/projects/maggi/voucher-4.webp",
+    "width": 1200,
+    "height": 180
+  },
+  "milo-erun/elements": {
+    "src": "/projects/milo-erun/elements.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "milo-erun/cover": {
+    "src": "/projects/milo-erun/cover.webp",
+    "width": 1488,
+    "height": 1452
+  },
+  "skinology/cover": {
+    "src": "/projects/skinology/cover.webp",
+    "width": 1920,
+    "height": 703
+  },
+  "ecommerce/cover": {
+    "src": "/projects/ecommerce/cover.webp",
+    "width": 1920,
+    "height": 1361
+  },
+  "amazon/cover": {
+    "src": "/projects/amazon/cover.webp",
+    "width": 862,
+    "height": 570
+  },
+  "amazon/detail": {
+    "src": "/projects/amazon/detail.webp",
+    "width": 1400,
+    "height": 788
+  },
+  "gerber/cover": {
+    "src": "/projects/gerber/cover.webp",
+    "width": 958,
+    "height": 1080
+  },
+  "ganh-hoi/page-1": {
+    "src": "/projects/ganh-hoi/page-1.webp",
+    "width": 849,
+    "height": 1200
+  },
+  "ganh-hoi/page-2": {
+    "src": "/projects/ganh-hoi/page-2.webp",
+    "width": 849,
+    "height": 1200
+  },
+  "ganh-hoi/page-4": {
+    "src": "/projects/ganh-hoi/page-4.webp",
+    "width": 849,
+    "height": 1200
+  },
+  "ganh-hoi/page-5": {
+    "src": "/projects/ganh-hoi/page-5.webp",
+    "width": 849,
+    "height": 1200
+  },
+  "ganh-hoi/page-6": {
+    "src": "/projects/ganh-hoi/page-6.webp",
+    "width": 849,
+    "height": 1200
+  },
+  "ganh-hoi/page-7": {
+    "src": "/projects/ganh-hoi/page-7.webp",
+    "width": 849,
+    "height": 1200
+  },
+  "ganh-hoi/page-8": {
+    "src": "/projects/ganh-hoi/page-8.webp",
+    "width": 849,
+    "height": 1200
+  },
+  "ganh-hoi/page-9": {
+    "src": "/projects/ganh-hoi/page-9.webp",
+    "width": 849,
+    "height": 1200
+  },
+  "ganh-hoi/page-10": {
+    "src": "/projects/ganh-hoi/page-10.webp",
+    "width": 849,
+    "height": 1200
+  },
+  "ganh-hoi/page-11": {
+    "src": "/projects/ganh-hoi/page-11.webp",
+    "width": 849,
+    "height": 1200
+  },
+  "ganh-hoi/page-12": {
+    "src": "/projects/ganh-hoi/page-12.webp",
+    "width": 849,
+    "height": 1200
+  },
+  "ganh-hoi/page-18": {
+    "src": "/projects/ganh-hoi/page-18.webp",
+    "width": 849,
+    "height": 1200
+  },
+  "ganh-hoi/page-20": {
+    "src": "/projects/ganh-hoi/page-20.webp",
+    "width": 849,
+    "height": 1200
+  },
+  "ganh-hoi/page-21": {
+    "src": "/projects/ganh-hoi/page-21.webp",
+    "width": 849,
+    "height": 1200
+  }
+}

@@ -27,3 +27,9 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# temporary and raw files
+.next-production/
+tmp/
+translate-*.js
+Project IMG Port/

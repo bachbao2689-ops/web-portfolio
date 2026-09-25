@@ -1,25 +1,6 @@
 import Image from 'next/image';
-import { Project } from '@/data/projects';
-import StudyArtwork from './StudyArtwork';
+import type { Artwork } from '@/data/projects';
 
-export default function ProjectImage({ project, phase = 0, className = "" }: { project: Project; phase?: number; className?: string }) {
-  // If the project has an image for the given phase, render it.
-  // We use phase as an index into the images array. 
-  // If we only have 1 image, we fallback to index 0. If no images, fallback to StudyArtwork.
-  
-  if (!project.images || project.images.length === 0) {
-    return <StudyArtwork variant={project.variant} phase={phase} />;
-  }
-
-  const imageSrc = project.images[phase] || project.images[0];
-
-  return (
-    <div className={`w-full h-full relative overflow-hidden bg-[#13140f] rounded-2xl ${className}`}>
-      <img
-        src={imageSrc}
-        alt={`${project.name} preview`}
-        className="w-full h-full object-cover"
-      />
-    </div>
-  );
+export default function ProjectImage({ image, priority = false, sizes = '(max-width: 700px) 90vw, 80vw', className = '' }: { image: Artwork; priority?: boolean; sizes?: string; className?: string }) {
+  return <Image className={`project-image ${className}`} src={image.src} alt={image.alt} width={image.width} height={image.height} sizes={sizes} priority={priority} />;
 }

@@ -4,12 +4,12 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion, useMotionValueEvent, useScroll, useTransform } from 'framer-motion';
 import { ArrowDown, ArrowLeft, ArrowUpRight, Maximize2, X } from 'lucide-react';
-import { chapters, projects, type Project } from '@/data/projects';
+import { chapters, projects, type Project, type Artwork } from '@/data/projects';
 import ProjectGlyph from './ProjectGlyph';
+import FollowMascot from './FollowMascot';
 import ProjectImage from './ProjectImage';
+import { useLanguage } from "./LanguageContext";
 import { MotionToggle, useMotionPreference } from './MotionPreference';
-import Mascot from './Mascot';
-import ShowcaseSection from './ShowcaseSection';
 
 function Reveal({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const { reduced } = useMotionPreference();
@@ -17,15 +17,9 @@ function Reveal({ children, className = '', delay = 0 }: { children: React.React
     viewport={{ once: true, amount: .15 }} transition={{ duration: reduced ? .1 : .7, delay: reduced ? 0 : delay, ease: [.22, 1, .36, 1] }}>{children}</motion.div>;
 }
 
-const phases = [
-  { label: 'Composition', title: ['Find the', 'feeling.'], caption: '01 / Structure & visual hierarchy', tags: ['Scale', 'Rhythm', 'Focal point'] },
-  { label: 'Color & light', title: ['Set the', 'atmosphere.'], caption: '02 / Color, contrast & mood', tags: ['Temperature', 'Contrast', 'Mood'] },
-  { label: 'The final frame', title: ['Bring it', 'to life.'], caption: '03 / Detail & final composition', tags: ['Texture', 'Balance', 'Story'] },
-];
-
-function DirectionSequence({ project }: { project: Project }) {
+function DirectionSequence({ project, onOpen }: { project: Project; onOpen: (image: Artwork) => void }) {
   const ref = useRef<HTMLElement>(null);
-  const { reduced } = useMotionPreference();
+  const { reduced } = useMotionPreference(); const { lang } = useLanguage(); const isVi = lang === "vi";
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
   const [phase, setPhase] = useState(0);
   const [compact, setCompact] = useState(false);
@@ -37,7 +31,7 @@ function DirectionSequence({ project }: { project: Project }) {
     return () => query.removeEventListener('change', update);
   }, []);
   useMotionValueEvent(scrollYProgress, 'change', value => { if (!compact) setPhase(Math.min(2, Math.floor(value * 3))); });
-  const stage = phases[phase];
+  const stage = project.stages[phase];
   function jump(index: number) {
     if (compact) { setPhase(index); return; }
     if (!ref.current) return;
@@ -45,26 +39,25 @@ function DirectionSequence({ project }: { project: Project }) {
     const distance = ref.current.offsetHeight - window.innerHeight;
     window.scrollTo({ top: start + distance * ((index + .08) / 3), behavior: reduced ? 'instant' : 'smooth' });
   }
-  return <section className="direction-sequence" id="direction" ref={ref} aria-label="Art direction in three stages">
+  return <section className="direction-sequence" id="direction" ref={ref} aria-label="Visual story in three chapters">
     <div className="direction-sticky">
-      <div className="sequence-top mono"><span>02 / Art direction</span><span>{compact ? 'Select a stage to explore' : 'Scroll to develop the image'} <ArrowDown size={14} /></span></div>
+      <div className="sequence-top mono"><span>02 / Visual story</span><span>{compact ? 'Select a chapter to explore' : 'Scroll to explore the story'} <ArrowDown size={14} /></span></div>
       <div className="direction-content content-width">
         <div className="direction-copy">
-          <nav className="phase-nav" aria-label="Art direction stages">{phases.map((item, index) => <button key={item.label} onClick={() => jump(index)} aria-current={phase === index ? 'step' : undefined} aria-label={`Show ${item.label}`}><span>0{index + 1}</span><i /></button>)}</nav>
+          <nav className="phase-nav" aria-label="Visual story chapters">{project.stages.map((item, index) => <button key={item.title} onClick={() => jump(index)} aria-current={phase === index ? 'step' : undefined} aria-label={`Show ${item.title}`}><span>0{index + 1}</span><i /></button>)}</nav>
           <div className="phase-copy" aria-live="polite">
             <AnimatePresence mode="wait" initial={false}>
               <motion.div key={phase} initial={{ opacity: 0, y: reduced ? 0 : 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: reduced ? 0 : -10 }} transition={{ duration: reduced ? .08 : .23 }}>
-                <p className="eyebrow">( {stage.label} )</p>
-                <h2>{stage.title[0]}<span className="phase-title-line"> {stage.title[1]}</span></h2>
-                <p className="body-copy">{project.notes[phase]}</p>
-                <div className="tag-list mono">{stage.tags.map(tag => <span key={tag}>{tag}</span>)}</div>
+                <p className="eyebrow">( {project.name} / 0{phase + 1} )</p>
+                <h2>{isVi && stage.title_vi ? stage.title_vi : stage.title}</h2>
+                <p className="body-copy">{isVi && stage.text_vi ? stage.text_vi : stage.text}</p>
               </motion.div>
             </AnimatePresence>
           </div>
         </div>
         <figure className="direction-art">
-          <div className="art-layers">{phases.map((_, index) => <motion.div key={index} className="art-layer" aria-hidden={phase !== index} animate={{ opacity: phase === index ? 1 : 0 }} transition={{ duration: reduced ? 0 : .55 }}><ProjectImage project={project} phase={index} /></motion.div>)}</div>
-          <figcaption className="mono"><span>{stage.caption}</span><span>Visual study</span></figcaption>
+          <button className="sequence-art-open" onClick={() => onOpen(stage.image)} aria-label={`Enlarge ${stage.title}`}><div className="art-layers">{project.stages.map((item, index) => <motion.div key={index} className="art-layer" aria-hidden={phase !== index} animate={{ opacity: phase === index ? 1 : 0 }} transition={{ duration: reduced ? 0 : .55 }}><ProjectImage image={item.image} sizes="(max-width: 700px) 87vw, 52vw" /></motion.div>)}</div><span className="artwork-expand"><Maximize2 size={18} /></span></button>
+          <figcaption className="mono"><span>0{phase + 1} / {isVi && stage.title_vi ? stage.title_vi : stage.title}</span><span>{isVi ? "Nhấn để xem chi tiết" : "Click to explore"}</span></figcaption>
         </figure>
       </div>
       <div className="sequence-progress"><motion.div style={{ scaleX: scrollYProgress }} /></div>
@@ -74,11 +67,14 @@ function DirectionSequence({ project }: { project: Project }) {
 }
 
 export default function ProjectStory({ project, nextProject }: { project: Project; nextProject: Project }) {
+  const { lang } = useLanguage();
+  const isVi = lang === "vi";
+
   const { reduced } = useMotionPreference();
   const { scrollYProgress } = useScroll();
   const [active, setActive] = useState(0);
   const [percent, setPercent] = useState(0);
-  const [artOpen, setArtOpen] = useState(false);
+  const [artOpen, setArtOpen] = useState<Artwork | null>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const rotate = useTransform(scrollYProgress, [0, 1], [0, 280]);
   const [anchor, setAnchor] = useState({ x: '51vw', y: '20vh' });
@@ -122,61 +118,57 @@ export default function ProjectStory({ project, nextProject }: { project: Projec
   }, [artOpen]);
 
   return <main className={`story-page ${active === 4 ? 'chapter-dark' : ''}`}>
-    <a className="skip-link" href="#idea">Skip to project story</a>
+    <a className="skip-link" href="#idea">{isVi ? 'Nhảy đến nội dung' : 'Skip to project story'}</a>
     <header className="story-header">
-      <Link href="/" className="wordmark" aria-label="Bach Bao home">bachbao<span>*</span></Link>
+      <Link href="/" className="wordmark" aria-label="BART home"> <img src="/assets/logo.svg" alt="BART" style={{ height: "32px", width: "auto" }} /> </Link>
       <span className="header-project mono">0{project.variant + 1} / {project.name}</span>
-      <nav><Link href="/#project-index" className="all-projects-link">All projects</Link><Link href="/" className="header-close"><span>Back to index</span><ArrowUpRight size={17} /></Link></nav>
+      <nav><Link href="/#project-index" className="all-projects-link">{isVi ? 'Tất cả dự án' : 'All projects'}</Link><Link href="/" className="header-close"><span>{isVi ? 'Về trang chủ' : 'Back to index'}</span><ArrowUpRight size={17} /></Link></nav>
       <motion.div className="reading-progress" style={{ scaleX: scrollYProgress }} />
     </header>
     <section className="story-hero" id="overview">
       <div className="hero-copy">
-        <p className="eyebrow">Art direction / Visual storytelling / {project.year}</p>
+        <p className="eyebrow">Senior Art / {isVi ? 'Kể chuyện bằng hình ảnh' : 'Visual storytelling'} / {project.year}</p>
         <motion.h1 initial={{ y: reduced ? 0 : 35, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: .8, ease: [.22, 1, .36, 1] }}>
           {project.title[0]}<br /><span className="circled-word">{project.title[1]}</span>
         </motion.h1>
-        <div className="hero-intro"><button className="round-link" aria-label="Read the project story" onClick={() => goTo(1)}><ArrowDown size={24} /></button><p>{project.line}</p></div>
-        <div className="hero-meta mono"><span>Concept study</span><span>0{project.variant + 1} — 0{projects.length}</span></div>
+        <div className="hero-intro"><button className="round-link" aria-label="Read the project story" onClick={() => goTo(1)}><ArrowDown size={24} /></button><p>{isVi && project.line_vi ? project.line_vi : project.line}</p></div>
+        <div className="hero-meta mono"><span>{isVi && project.category_vi ? project.category_vi : project.category}</span><span>0{project.variant + 1} — 0{projects.length}</span></div>
       </div>
       <motion.figure className="hero-artwork" initial={{ opacity: 0, rotate: reduced ? 0 : 4, y: reduced ? 0 : 45 }} animate={{ opacity: 1, rotate: -3, y: 0 }} transition={{ duration: .9, delay: reduced ? 0 : .15, ease: [.22, 1, .36, 1] }}>
-        <button onClick={() => setArtOpen(true)} className="artwork-open" aria-label={`Enlarge ${project.name} visual study`}><ProjectImage project={project} phase={0} /><span className="artwork-expand"><Maximize2 size={18} /></span></button>
-        <figcaption className="mono">A visual study / {project.name}<ArrowUpRight size={15} /></figcaption>
+        <button onClick={() => setArtOpen(project.cover)} className="artwork-open" aria-label={`Enlarge ${project.name} artwork`}><ProjectImage image={project.cover} priority sizes="(max-width: 700px) 90vw, 48vw" /><span className="artwork-expand"><Maximize2 size={18} /></span></button>
+        <figcaption className="mono">{isVi ? 'Dự án chọn lọc' : 'Selected work'} / {project.name}<ArrowUpRight size={15} /></figcaption>
       </motion.figure>
-      <div className="hero-bottom mono"><span>Scroll to discover the thinking</span><span>Layout prototype · Illustrative artwork</span></div>
+      <div className="hero-bottom mono"><span>{isVi ? 'Cuộn để khám phá ý tưởng' : 'Scroll to discover the thinking'}</span><span>BART / Portfolio 2026</span></div>
     </section>
-    <div className="story-marquee" aria-hidden="true"><div>{[0, 1, 2, 3].map(i => <span key={i}>Art direction <b>✦</b> Worldbuilding <b>✦</b> Visual storytelling <b>✦</b> {project.name} <b>✦</b> </span>)}</div></div>
+    <div className="story-marquee" aria-hidden="true"><div>{[0, 1, 2, 3].map(i => <span key={i}>Senior Art <b>✦</b> {isVi ? 'Thiết kế hình ảnh' : 'Image making'} <b>✦</b> {isVi ? 'Kể chuyện bằng hình ảnh' : 'Visual storytelling'} <b>✦</b> {project.name} <b>✦</b> </span>)}</div></div>
     <section className="idea-section" id="idea">
-      <div className="content-width idea-grid"><Reveal><p className="eyebrow">01 / The idea</p><h2>{project.question}</h2></Reveal><Reveal className="idea-body" delay={.12}><p className="large-copy">{project.idea}</p><div className="idea-disciplines mono"><span>◆ Art direction</span><span>◆ Composition</span><span>◆ Storytelling</span></div></Reveal></div>
+      <div className="content-width idea-grid"><Reveal><p className="eyebrow">01 / {isVi ? 'Ý tưởng' : 'The idea'}</p><h2>{isVi && project.question_vi ? project.question_vi : project.question}</h2></Reveal><Reveal className="idea-body" delay={.12}><p className="large-copy">{isVi && project.idea_vi ? project.idea_vi : project.idea}</p><div className="idea-disciplines mono"><span>◆ Senior Art</span><span>◆ Composition</span><span>◆ Storytelling</span></div></Reveal></div>
     </section>
-    <DirectionSequence project={project} />
-    <ShowcaseSection project={project} />
+    <DirectionSequence project={project} onOpen={setArtOpen} />
     <section className="process-section" id="process">
-      <div className="content-width"><div className="process-heading"><Reveal><p className="eyebrow">03 / The process</p><h2>One intention.<br />Every detail.</h2></Reveal><Reveal className="process-intro"><p className="large-copy">From the first question to the final frame. Three decisions that shape the world.</p></Reveal></div>
-        <div className="process-cards">{[
-          { title: 'Find the story', label: '01 · Discover', text: 'Start with a feeling, a question and a point of view. Gather references that share an intention, not just a look.' },
-          { title: 'Build the language', label: '02 · Develop', text: 'Explore scale, composition and color. Test the strongest direction, then remove what does not serve it.' },
-          { title: 'Make it matter', label: '03 · Refine', text: 'Bring the details together. Every shape, every shadow and every pause should support the same story.' },
-        ].map((card, index) => <Reveal delay={index * .08} key={card.label} className="process-card"><p className="mono">{card.label}</p><h3>{card.title}<ArrowUpRight size={22} aria-hidden="true" /></h3><p>{card.text}</p></Reveal>)}</div>
-        <p className="process-footnote mono">The image is the result. The thinking is the work.</p>
+      <div className="content-width"><div className="process-heading"><Reveal><p className="eyebrow">03 / {isVi ? 'Bộ sưu tập' : 'The collection'}</p><h2>{isVi ? 'Chi tiết' : 'The work.'}<br />{isVi ? 'tác phẩm.' : 'In full.'}</h2></Reveal><Reveal className="process-intro"><p className="large-copy">{isVi && project.category_vi ? project.category_vi : project.category}<br /><span className="gallery-instruction">{isVi ? 'Chọn hình bất kỳ để xem chi tiết.' : 'Select any image for a closer look.'}</span></p></Reveal></div>
+        <div className={`project-gallery ${project.slug === 'ganh-hoi' ? 'gallery-editorial' : ''}`}>{project.gallery.map((panel, index) => <Reveal key={panel.image.src} className={`gallery-panel ${panel.layout || ''}`}>
+          <figure><button className="gallery-image-button" onClick={() => setArtOpen(panel.image)} aria-label={`Enlarge ${panel.title}`}><ProjectImage image={panel.image} sizes={panel.layout === 'portrait' ? '(max-width: 700px) 87vw, 40vw' : '(max-width: 700px) 87vw, 80vw'} /><span className="artwork-expand"><Maximize2 size={18} /></span></button><figcaption><span className="mono">{String(index + 1).padStart(2, '0')}</span><div><h3>{isVi && panel.title_vi ? panel.title_vi : panel.title}</h3><p>{isVi && panel.text_vi ? panel.text_vi : panel.text}</p></div></figcaption></figure>
+        </Reveal>)}</div>
       </div>
     </section>
     <section className="outcome-section" id="outcome">
       <div className="outcome-grid" aria-hidden="true" />
-      <div className="content-width outcome-content"><Reveal><p className="eyebrow">04 / The outcome</p><h2>{project.statement.split('\n').map((line, i) => <span key={i}>{line}<br /></span>)}</h2><p>A world with a point of view.<br />An image that stays with you.</p></Reveal><div className="outcome-glyph" aria-hidden="true"><ProjectGlyph variant={project.variant} /></div></div>
-      <div className="content-width outcome-footer mono"><span>{project.category}</span><span>Bach Bao / {project.year}</span></div>
+      <div className="content-width outcome-content"><Reveal><p className="eyebrow">04 / {isVi ? 'Kết quả' : 'The outcome'}</p><h2>{(isVi && project.statement_vi ? project.statement_vi : project.statement).split('\n').map((line, i) => <span key={i}>{line}<br /></span>)}</h2><p>{isVi && project.outcome_vi ? project.outcome_vi : project.outcome}</p></Reveal><div className="outcome-glyph" aria-hidden="true"><ProjectGlyph variant={project.variant} /></div></div>
+      <div className="content-width outcome-footer mono"><span>{isVi && project.category_vi ? project.category_vi : project.category}</span><span>BART / {project.year}</span></div>
     </section>
     <section className="next-section" id="next-project">
-      <div className="content-width"><p className="eyebrow">( One more story? )</p><Link className="next-project-link" href={`/projects/${nextProject.slug}`}><div className="next-glyph"><ProjectGlyph variant={nextProject.variant} /></div><div><span className="mono">Up next / 0{nextProject.variant + 1}</span><h2>{nextProject.name}</h2></div><ArrowUpRight className="next-arrow" /></Link>
-        <footer className="story-footer"><Link href="/" className="wordmark">bachbao*</Link><Link href="/#project-index"><ArrowLeft size={15} /> All projects</Link><span className="mono">Portfolio / 2026</span></footer>
+      <div className="content-width"><p className="eyebrow">( {isVi ? 'Một câu chuyện khác?' : 'One more story?'} )</p><Link className="next-project-link" href={`/projects/${nextProject.slug}`}><div className="next-glyph"><ProjectGlyph variant={nextProject.variant} /></div><div><span className="mono">{isVi ? 'Tiếp theo' : 'Up next'} / 0{nextProject.variant + 1}</span><h2>{nextProject.name}</h2></div><ArrowUpRight className="next-arrow" /></Link>
+        <footer className="story-footer"><Link href="/" className="wordmark"> <img src="/assets/logo.svg" alt="BART" style={{ height: "32px", width: "auto" }} /> </Link><Link href="/#project-index"><ArrowLeft size={15} /> {isVi ? 'Tất cả dự án' : 'All projects'}</Link><span className="mono">Portfolio / 2026</span></footer>
       </div>
     </section>
-    <nav className="chapter-nav" aria-label="Project chapters">{chapters.map((chapter, index) => <button key={chapter.id} onClick={() => goTo(index)} aria-label={`Go to ${chapter.label}`} aria-current={active === index ? 'location' : undefined}><span>{chapter.label}</span><i /></button>)}</nav>
+    <nav className="chapter-nav" aria-label="Project chapters">{chapters.map((chapter, index) => <button key={chapter.id} onClick={() => goTo(index)} aria-label={`Go to ${chapter.label}`} aria-current={active === index ? 'location' : undefined}><span>{isVi && chapter.label_vi ? chapter.label_vi : chapter.label}</span><i /></button>)}</nav>
     <motion.div className="story-guide" animate={reduced ? { x: '88vw', y: '25vh' } : { x: anchor.x, y: anchor.y }} transition={reduced ? { duration: 0 } : { type: 'spring', stiffness: 52, damping: 15 }}>
-      <button onClick={() => goTo(Math.min(active + 1, chapters.length - 1))} aria-label={`Continue to ${chapters[Math.min(active + 1, chapters.length - 1)].label}`}><span className="guide-bubble">{chapters[active].hint}</span><motion.span style={{ rotate: reduced ? 0 : rotate }}><Mascot variant={project.variant} className="w-[50px] h-[50px] text-slate-900" /></motion.span></button>
+      <button onClick={() => goTo(Math.min(active + 1, chapters.length - 1))} aria-label={`Continue`}><span className="guide-bubble">{isVi && chapters[active].hint_vi ? chapters[active].hint_vi : chapters[active].hint}</span><span><FollowMascot anchorX={anchor.x} /></span></button>
     </motion.div>
     <div className="story-utilities"><span className="reading-count mono">{String(percent).padStart(3, '0')} / 100</span><MotionToggle /></div>
-    <dialog className="art-dialog" ref={dialog} onCancel={() => setArtOpen(false)} onClick={event => { if (event.target === event.currentTarget) setArtOpen(false); }} aria-label={`${project.name} artwork preview`}>
-      <button className="dialog-close" onClick={() => setArtOpen(false)} aria-label="Close artwork preview"><X size={24} /></button><ProjectImage project={project} phase={0} /><p className="mono">Illustrative artwork · {project.name}</p>
+    <dialog className="art-dialog" ref={dialog} onCancel={() => setArtOpen(null)} onClick={event => { if (event.target === event.currentTarget) setArtOpen(null); }} aria-label={`${project.name} artwork preview`}>
+      <button className="dialog-close" onClick={() => setArtOpen(null)} aria-label="Close artwork preview"><X size={24} /></button>{artOpen && <><ProjectImage image={artOpen} sizes="95vw" /><div className="dialog-caption"><p className="mono">{artOpen.alt}</p><a href={artOpen.src} target="_blank" rel="noreferrer">Open full image ↗</a></div></>}
     </dialog>
   </main>;
 }

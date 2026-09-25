@@ -1,87 +1,122 @@
-export type Project = {
-  slug: string;
-  name: string;
-  title: [string, string];
-  category: string;
-  year: string;
-  variant: number;
-  accent: string;
-  line: string;
-  question: string;
-  idea: string;
-  statement: string;
-  notes: [string, string, string];
-  images: string[];
-};
+import assets from './project-assets.json';
 
+export type Artwork = { src: string; width: number; height: number; alt: string };
+export type StoryPanel = { title: string; title_vi?: string; text: string; text_vi?: string; image: Artwork; layout?: 'portrait' };
+export type Project = {
+  slug: string; name: string; title: [string, string]; category: string; category_vi?: string; year: string; year_vi?: string;
+  variant: number; accent: string; line: string; line_vi?: string; question: string; question_vi?: string; idea: string; idea_vi?: string;
+  statement: string; statement_vi?: string; outcome: string; outcome_vi?: string; cover: Artwork; stages: StoryPanel[]; gallery: StoryPanel[];
+};
+function art(key: keyof typeof assets, alt: string): Artwork { return { ...assets[key], alt }; }
+function panel(title: string, text: string, key: keyof typeof assets, layout?: 'portrait', title_vi?: string, text_vi?: string): StoryPanel {
+  return { title, title_vi, text, text_vi, image: art(key, title), layout };
+}
+// Behance order first, then additional supplied projects. Dates and personal credits are not inferred.
 export const projects: Project[] = [
   {
-    slug: 'maggi', name: 'Maggi', title: ['Maggi', 'Campaign.'],
-    category: 'Advertising · Visual Direction', year: '2026', variant: 0, accent: '#d76938',
-    line: 'A flavorful journey.',
-    question: 'How to bring out the best taste?',
-    idea: 'Showcasing the essence of Maggi through vibrant visuals and relatable social moments. Bringing families together around the dining table.',
-    statement: 'Taste the\ndifference.',
-    notes: ['Main Key Visual highlighting the product.', 'Social media adaptations and engagement.', 'Vouchers and promotional materials.'],
-    images: ['/projects/Maggi/Documentation.png', '/projects/Maggi/MAIN KV.png', '/projects/Maggi/Social media.png']
+    slug: 'nestle-ptit', name: 'Nestlé P’tit', title: ['Nestlé', 'P’tit.'], category: 'Packaging · Social · Motion', year: 'Selected work', variant: 0, accent: '#b8e7f1',
+    line: 'Vị ngon con thích. Bụng lành lớn nhanh.', question: 'A small beginning. A world of discovery.', question_vi: 'Một khởi đầu nhỏ. Một thế giới khám phá.',
+    idea: 'A playful visual world for Nestlé P’tit Vietnam. Natural ingredients, a bright outdoor setting and a friendly blue character bring the product story into packaging, motion storyboards and social content.', idea_vi: 'Một thế giới hình ảnh vui nhộn cho Nestlé P’tit Việt Nam. Nguyên liệu tự nhiên, khung cảnh ngoài trời tươi sáng và nhân vật màu xanh thân thiện đưa câu chuyện sản phẩm vào bao bì, kịch bản chuyển động và nội dung mạng xã hội.',
+    statement: 'Small moments.\nBright beginnings.', statement_vi: 'Những khoảnh khắc nhỏ.\nKhởi đầu tươi sáng.', outcome: 'One visual language, from the pack to the social feed.', outcome_vi: 'Một ngôn ngữ hình ảnh, từ bao bì đến mạng xã hội.',
+    cover: art('nestle-ptit/cover', 'Nestlé P’tit campaign with yogurt, banana and blue character'),
+    stages: [panel('The product world', 'A blue sky, a green landscape and recognisable ingredients establish a fresh, welcoming mood.', 'nestle-ptit/overview'), panel('From image to pack', 'The character, product cues and colour palette carry through to the packaging.', 'nestle-ptit/packaging'), panel('A story in frames', 'Sequential frames introduce the product before bringing the campaign message into focus.', 'nestle-ptit/motion')],
+    gallery: [panel('Packaging', 'Product mockups and the unfolded packaging design, presented together.', 'nestle-ptit/packaging'), panel('Motion storyboard', 'Two sequences shown frame by frame using the supplied storyboard stills.', 'nestle-ptit/motion'), panel('Social post', 'Hero posts lead into supporting product and educational content.', 'nestle-ptit/social')],
   },
   {
-    slug: 'milo', name: 'Milo', title: ['Milo', 'Energy.'],
-    category: 'Brand Campaign · Social', year: '2026', variant: 1, accent: '#799573',
-    line: 'Fuel for the champions.',
-    question: 'What drives the youth today?',
-    idea: 'An energetic and dynamic visual language that speaks directly to the active lifestyle of teens and young adults.',
-    statement: 'Unleash your\npotential.',
-    notes: ['High-impact social media assets.', 'Print materials (In ấn) for offline presence.', 'Consistent brand documentation.'],
-    images: ['/projects/Milo/Documentation.png', '/projects/Milo/Social.png', '/projects/Milo/In ấn.png']
+    slug: 'milo-erun', name: 'MILO ERUN', title: ['MILO', 'ERUN.'], category: 'Campaign · Print · Social', year: 'Selected work', variant: 1, accent: '#168344',
+    line: 'Năng động Việt Nam. Energy in every step.', question: 'Turn everyday energy into a shared movement.', question_vi: 'Biến năng lượng mỗi ngày thành chuyển động chung.',
+    idea: 'MILO ERUN brings the energy of sport into a connected visual world. Young runners emerge from a phone into an outdoor landscape, linking the online running experience with real activity and shared achievement.', idea_vi: 'MILO ERUN mang năng lượng thể thao vào một thế giới hình ảnh kết nối. Những vận động viên nhí bước ra từ chiếc điện thoại vào không cảnh thiên nhiên, kết nối trải nghiệm chạy bộ trực tuyến với hoạt động thực tế và thành tích chung.',
+    statement: 'Built to\nkeep moving.', statement_vi: 'Được tạo ra\nđể không ngừng tiến bước.', outcome: 'A campaign system spanning the key visual, certificates, medals and social communication.', outcome_vi: 'Hệ thống chiến dịch bao gồm hình ảnh chủ đạo, giấy chứng nhận, huy chương và truyền thông mạng xã hội.',
+    cover: art('milo-erun/cover', 'MILO ERUN runners emerging from a phone into an island landscape'),
+    stages: [panel('The campaign idea', 'The familiar MILO green becomes the setting for a dynamic running scene.', 'milo-erun/overview'), panel('Building the scene', 'The phone, landscape, island and photographed runners are the core visual elements.', 'milo-erun/elements'), panel('Made tangible', 'Certificates and medals carry the same identity beyond the screen.', 'milo-erun/print')],
+    gallery: [panel('Visual elements', 'Landscape elements and talent photography used in the campaign composition.', 'milo-erun/elements'), panel('Certificate & medal', 'The print and event applications follow the campaign key visual.', 'milo-erun/print'), panel('Social post', 'A six-post system connects launch, rewards, event information and participation.', 'milo-erun/social')],
   },
   {
-    slug: 'cosmetic', name: 'Cosmetic', title: ['Beauty', 'Care.'],
-    category: 'Product · Lifestyle', year: '2026', variant: 2, accent: '#ef7769',
-    line: 'Elegance in every drop.',
-    question: 'How to capture true beauty?',
-    idea: 'A clean, sophisticated art direction focusing on the product textures, steps of usage, and the overall lifestyle it brings to the user.',
-    statement: 'Glow from\nwithin.',
-    notes: ['Step-by-step usage guide.', 'Stop motion animation planning.', 'Lifestyle integration and documentation.'],
-    images: ['/projects/Cosmetic/Documentation.png', '/projects/Cosmetic/life style.png', '/projects/Cosmetic/Step.png']
+    slug: 'skinology', name: 'Skinology', title: ['Skin', 'ology.'], category: 'Photography · Styling · Storyboards', year: 'Selected work', variant: 2, accent: '#f4c58d',
+    line: 'A quieter way to make a product stand out.', question: 'Let light, texture and space tell the story.',
+    idea: 'Product photography for Skinology, organised around concept, product combinations and skincare routines. Clean surfaces, directional light and carefully chosen props give each product a distinct mood while keeping the collection coherent.',
+    statement: 'Less noise.\nMore feeling.', outcome: 'Concept imagery, stop-motion frames, lifestyle photography and skincare sequences.',
+    cover: art('skinology/cover', 'Skinology skincare products styled with soft light and warm backgrounds'),
+    stages: [panel('Concept & combinations', 'Native, clean and focused visual directions create different ways to tell the product story.', 'skinology/overview'), panel('Frame by frame', 'An overhead composition becomes a sequence of product and prop arrangements.', 'skinology/stopmotion'), panel('In everyday life', 'Ingredients, colour and light bring the products into a tactile setting.', 'skinology/lifestyle')],
+    gallery: [panel('Stop-motion frames', 'The original sequence stays together, preserving its rhythm from left to right.', 'skinology/stopmotion'), panel('Lifestyle', 'An asymmetrical photo collage, following the arrangement in the portfolio.', 'skinology/lifestyle'), panel('Step skincare', 'A structured grid turns individual products into clear skincare routines.', 'skinology/steps')],
   },
   {
-    slug: 'gerber-ptit', name: 'Gerber Ptit', title: ['Gerber', 'Ptit.'],
-    category: 'Packaging · Social', year: '2026', variant: 3, accent: '#8a9b99',
-    line: 'Nutrition for the little ones.',
-    question: 'What do parents look for?',
-    idea: 'Trustworthy, warm, and playful design that highlights nutritional value while remaining approachable to modern parents.',
-    statement: 'Care in every\nbite.',
-    notes: ['Packaging design updates.', 'Social media content strategy.', 'Comprehensive project documentation.'],
-    images: ['/projects/Doc img/Documentation.png', '/projects/Doc img/Packaging.png', '/projects/Doc img/Social media.png']
+    slug: 'ecommerce', name: 'E-commerce Visuals', title: ['Digital', 'shelves.'], category: 'Key visuals · Campaign · E-commerce', year: 'Selected work', variant: 3, accent: '#68b7e5',
+    line: 'Many brands. One clear visual hierarchy.', question: 'Make the message land at first glance.',
+    idea: 'A collection of commerce visuals across nutrition, food and retail. Product, offer and call to action are arranged into an immediate reading order, then adapted across campaign banners, product information and mobile storefronts.',
+    statement: 'See it.\nGet it.', outcome: 'Campaign key visuals and product detail systems across different brands and formats.',
+    cover: art('ecommerce/cover', 'Six colourful e-commerce campaign key visuals'),
+    stages: [panel('Brand & campaign', 'Distinct brand worlds connected by a clear product-first hierarchy.', 'ecommerce/overview'), panel('Key visual systems', 'Campaign messages, product groupings and promotional accents across formats.', 'ecommerce/board-2'), panel('The mobile journey', 'Product information unfolds in a vertical sequence for mobile shopping.', 'ecommerce/board-3')],
+    gallery: [panel('Brand moments', 'Nutrition and ice-cream visuals open the collection.', 'ecommerce/board-1'), panel('Campaign collection', 'Six campaign compositions retain their original two-row arrangement.', 'ecommerce/board-2'), panel('Product detail pages', 'Mobile product stories shown side by side.', 'ecommerce/board-3'), panel('Maggi commerce', 'The hero visual expands into banners, offers and voucher modules.', 'ecommerce/board-4'), panel('Product information', 'A family of product detail layouts with consistent information hierarchy.', 'ecommerce/board-5')],
   },
   {
-    slug: 'ecommerce', name: 'E-commerce', title: ['Ecom', 'Platform.'],
-    category: 'UI/UX · Web Design', year: '2026', variant: 4, accent: '#a08bce',
-    line: 'Seamless shopping experience.',
-    question: 'How to simplify the journey?',
-    idea: 'A series of interface designs focusing on clarity, ease of use, and a modern aesthetic to boost conversion rates and user satisfaction.',
-    statement: 'Shop with\nease.',
-    notes: ['User interface components.', 'Product listing and details.', 'Checkout flow optimization.'],
-    images: ['/projects/Ecom/Documentation.png', '/projects/Ecom/1.png', '/projects/Ecom/2.png', '/projects/Ecom/3.png']
+    slug: 'amazon', name: 'Amazon Visuals', title: ['Less is', 'more.'], category: 'Product · Performance creative', year: 'Selected work', variant: 4, accent: '#b4c6be',
+    line: 'A personal place for every cat.', question: 'Make comfort the first thing you see.',
+    idea: 'Product visuals for a US audience, built around a “less is more” approach. Product photography leads, concise benefit messages guide the eye and a clear offer completes the composition.',
+    statement: 'Clear benefits.\nQuiet confidence.', outcome: 'Six product creatives exploring comfort, play and the everyday life of cats.',
+    cover: art('amazon/cover', 'Six cat furniture product creatives in a two-row grid'),
+    stages: [panel('Less is more', 'A compact visual system keeps the product and its purpose easy to understand.', 'amazon/detail'), panel('Product & benefit', 'A consistent grid makes variations in colour, message and setting easy to compare.', 'amazon/cover'), panel('The collection', 'Comfort, play and reassurance become distinct messages within one product family.', 'amazon/overview')],
+    gallery: [panel('The complete collection', 'The six creatives retain their original order and full compositions.', 'amazon/overview')],
   },
   {
-    slug: 'ganh-hoi', name: 'Gánh Hội', title: ['Gánh', 'Hội.'],
-    category: 'Event · Branding', year: '2026', variant: 0, accent: '#d76938',
-    line: 'Cultural heritage meets modern event.',
-    question: 'How to preserve tradition?',
-    idea: 'Branding for a cultural event that bridges the gap between traditional values and contemporary aesthetics.',
-    statement: 'Celebrate our\nroots.',
-    notes: ['Event proposal and planning.', 'Visual identity and branding.', 'Official documentation.'],
-    images: [] // Only PDF is available
-  }
+    slug: 'gerber', name: 'Gerber × P’tit', title: ['Natural', 'beginnings.'], category: 'Packaging · Launch · Social', year: 'Selected work', variant: 5, accent: '#16a4ce',
+    line: 'Khởi đầu tự nhiên. Mỗi ngày khôn lớn.', question: 'Make the ingredients part of the identity.',
+    idea: 'Fruit and vegetables become playful letterforms for a baby-food launch. A clear blue foundation holds the system together, while ingredient colours, hand-drawn details and milestone stickers add warmth and discovery.',
+    statement: 'Naturally\nfull of life.', outcome: 'A launch identity carried through the feeding box, packaging panels and social campaign.',
+    cover: art('gerber/cover', 'Gerber and Nestlé P’tit feeding boxes with fruit letterforms'),
+    stages: [panel('A natural beginning', 'Real ingredients become the starting point for a friendly visual language.', 'gerber/overview'), panel('Letters with flavour', 'Fruit and vegetable typography gives each side of the box its own character.', 'gerber/packaging'), panel('Ready for launch', 'The packaging identity extends into a family of campaign posts.', 'gerber/social')],
+    gallery: [panel('Packaging system', 'Front, back and side panels together show the complete packaging system.', 'gerber/packaging'), panel('Social campaign', 'Launch messages and product combinations share the blue, cream and ingredient palette.', 'gerber/social')],
+  },
+  {
+    slug: 'maggi', name: 'Bạn & Maggi', title: ['Bạn &', 'Maggi.'], category: 'Campaign · Food · E-commerce', year: 'Selected work', variant: 6, accent: '#f3db21',
+    line: 'Cùng tạo khác biệt tích cực.', question: 'Bring the warmth of the kitchen into the frame.',
+    idea: 'Maggi becomes a companion in the kitchen. A tactile background, expressive headline and bold yellow brand colour connect the main visual, commerce applications and food photography.',
+    statement: 'Good food.\nShared stories.', outcome: 'A connected set of key visuals, commerce modules and food imagery.',
+    cover: art('maggi/cover', 'Bạn & Maggi key visual with sauces and plated food'),
+    stages: [panel('The campaign story', 'The product range and a shared-meal setting establish the campaign message.', 'maggi/overview'), panel('Across the shelf', 'The central composition adapts into promotional banners and commerce modules.', 'maggi/social'), panel('Food in focus', 'Ingredients, hands and dishes tell the food story through photographs.', 'maggi/food-process')],
+    gallery: [panel('Social & e-commerce', 'The main visual sits alongside its promotional adaptations.', 'maggi/social'), panel('From preparation…', 'A three-column sequence follows ingredients, cooking and plating.', 'maggi/food-process'), panel('…to the final plate', 'The finished dishes form a companion grid.', 'maggi/food-final'), panel('Campaign banner', 'The same visual language in a horizontal format.', 'maggi/banner'), ...[1,2,3,4].map(n => panel(`Voucher / 0${n}`, 'Offer modules from the campaign artwork.', `maggi/voucher-${n}` as keyof typeof assets))],
+  },
+  {
+    slug: 'ganh-hoi', name: 'Gánh Hội', title: ['Gánh', 'Hội.'], category: 'Editorial · Packaging · Craft', year: 'Selected work', variant: 7, accent: '#b5b68a',
+    line: 'Gánh quà Trung Thu nghệ nhân.', question: 'Carry a little tradition into the present.', question_vi: 'Mang một chút truyền thống vào hiện tại.',
+    idea: 'A Mid-Autumn gift collection from Phùng Ân, told through craft, material and ritual. The editorial presents the makers, the gift objects and their details with an earthy palette and a measured photographic rhythm.', idea_vi: 'Bộ sưu tập quà Trung Thu từ Phùng Ân, được kể qua thủ công, chất liệu và nghi lễ. Bài biên tập giới thiệu những người thợ, các món quà và chi tiết của chúng bằng bảng màu đất và nhịp điệu nhiếp ảnh có chừng mực.',
+    statement: 'Craft carries\na story.', statement_vi: 'Thủ công mang theo\nmột câu chuyện.', outcome: 'An editorial journey through the collection, its handmade objects and gift packaging.', outcome_vi: 'Một hành trình biên tập qua bộ sưu tập, các món đồ thủ công và bao bì quà tặng.',
+    cover: art('ganh-hoi/page-1', 'Gánh Hội Mid-Autumn gift collection cover'),
+    stages: [panel('The story of craft', 'The collection opens with its cultural references and the hands behind the objects.', 'ganh-hoi/page-2'), panel('Made by hand', 'A collage of making, materials and detail introduces the craft process.', 'ganh-hoi/page-4'), panel('A gift, considered', 'Photography and packaging bring the story together in a tangible object.', 'ganh-hoi/page-12')],
+    gallery: [panel('Gánh Mùa', 'The first gift composition in the collection.', 'ganh-hoi/page-5', 'portrait'), panel('Gánh Hoa', 'Colour and material in the second composition.', 'ganh-hoi/page-6', 'portrait'), panel('Gánh Mật', 'A companion composition in the editorial system.', 'ganh-hoi/page-7', 'portrait'), panel('Tặng phẩm nghệ nhân', 'The handmade objects and their details.', 'ganh-hoi/page-8', 'portrait'), panel('Objects in hand', 'A photographic pause within the story.', 'ganh-hoi/page-9', 'portrait'), panel('Colour & material', 'The Hũ Xu Xê colour palette.', 'ganh-hoi/page-10', 'portrait'), panel('Trà & bánh', 'Tea and mooncakes complete the gift ritual.', 'ganh-hoi/page-11', 'portrait'), panel('The gift box', 'Packaging photography from the editorial.', 'ganh-hoi/page-12', 'portrait'), panel('Brand applications', 'The identity across tags, bags and boxes.', 'ganh-hoi/page-18', 'portrait'), panel('The handmade detail', 'A close look at the woven material.', 'ganh-hoi/page-20', 'portrait')],
+  },
+];
+export const chapters = [
+  { id: 'overview', label: 'Overview', label_vi: 'Tổng quan', hint: 'Every story starts somewhere.', hint_vi: 'Mọi câu chuyện đều có khởi đầu.' },
+  { id: 'idea', label: 'The idea', label_vi: 'Ý tưởng', hint: 'Find the idea behind the image.', hint_vi: 'Tìm ý tưởng đằng sau hình ảnh.' },
+  { id: 'direction', label: 'Visual story', label_vi: 'Câu chuyện', hint: 'Scroll through the visual story.', hint_vi: 'Khám phá câu chuyện hình ảnh.' },
+  { id: 'process', label: 'The collection', label_vi: 'Bộ sưu tập', hint: 'Take a closer look at the work.', hint_vi: 'Nhìn gần hơn vào tác phẩm.' },
+  { id: 'outcome', label: 'The outcome', label_vi: 'Kết quả', hint: 'One idea, across every touchpoint.', hint_vi: 'Một ý tưởng, xuyên suốt mọi điểm chạm.' },
+  { id: 'next-project', label: 'Up next', label_vi: 'Tiếp theo', hint: 'There is another story waiting.', hint_vi: 'Một câu chuyện khác đang chờ.' },
 ];
 
-export const chapters = [
-  { id: 'overview', label: 'Overview', hint: 'Every story starts somewhere.' },
-  { id: 'idea', label: 'The idea', hint: 'First, find the right question.' },
-  { id: 'direction', label: 'Art direction', hint: 'Scroll. Watch the idea take shape.' },
-  { id: 'process', label: 'The process', hint: 'A little intention in every decision.' },
-  { id: 'outcome', label: 'The outcome', hint: 'One world. One clear feeling.' },
-  { id: 'next-project', label: 'Up next', hint: 'There is another story waiting.' },
-];
+
+
+// Auto-injected Vietnamese translations for nested objects
+projects.forEach(p => {
+  const catDict: Record<string, string> = {"Packaging · Social · Motion":"Bao bì · Mạng xã hội · Chuyển động","Campaign · Print · Social":"Chiến dịch · In ấn · Mạng xã hội","Photography · Styling · Storyboards":"Nhiếp ảnh · Phong cách · Kịch bản","Campaign · Key visuals · Layout":"Chiến dịch · Hình ảnh chủ đạo · Bố cục","Product · Performance creative":"Sản phẩm · Sáng tạo hiệu suất","Packaging · Launch · Social":"Bao bì · Ra mắt · Mạng xã hội","Campaign · Food · E-commerce":"Chiến dịch · Ẩm thực · Thương mại điện tử","Editorial · Packaging · Craft":"Biên tập · Bao bì · Thủ công"};
+  if (catDict[p.category]) p.category_vi = catDict[p.category];
+});
+// Auto-injected Vietnamese translations for nested objects
+projects.forEach(p => {
+  const dictionary: Record<string, string> = {"Make comfort the first thing you see.":"Hãy để sự thoải mái là điều đầu tiên bạn thấy.","Product visuals for a US audience, built around a “less is more” approach. Product photography leads, concise benefit messages guide the eye and a clear offer completes the composition.":"Hình ảnh sản phẩm dành cho thị trường Mỹ, xây dựng dựa trên phương pháp \"less is more\". Nhiếp ảnh sản phẩm dẫn dắt, thông điệp lợi ích súc tích điều hướng ánh nhìn và ưu đãi rõ ràng hoàn thiện bố cục.","Clear benefits.\\nQuiet confidence.":"Lợi ích rõ ràng.\\nTự tin thầm lặng.","Six product creatives exploring comfort, play and the everyday life of cats.":"6 sáng tạo sản phẩm khám phá sự thoải mái, vui chơi và cuộc sống hàng ngày của loài mèo.","Less is more":"Càng ít càng nhiều","A compact visual system keeps the product and its purpose easy to understand.":"Hệ thống hình ảnh nhỏ gọn giữ cho sản phẩm và mục đích của nó dễ hiểu.","Product & benefit":"Sản phẩm & lợi ích","A consistent grid makes variations in colour, message and setting easy to compare.":"Lưới bố cục nhất quán giúp việc so sánh các biến thể về màu sắc, thông điệp và bối cảnh trở nên dễ dàng.","The collection":"Bộ sưu tập","Comfort, play and reassurance become distinct messages within one product family.":"Sự thoải mái, vui chơi và an tâm trở thành những thông điệp riêng biệt trong một gia đình sản phẩm.","The complete collection":"Trọn bộ sưu tập","The six creatives retain their original order and full compositions.":"6 thiết kế sáng tạo giữ nguyên thứ tự và bố cục ban đầu.","Make the ingredients part of the identity.":"Biến nguyên liệu thành một phần của nhận diện.","Fruit and vegetables become playful letterforms for a baby-food launch. A clear blue foundation holds the system together, while ingredient colours, hand-drawn details and milestone stickers add warmth and discovery.":"Trái cây và rau củ biến thành các chữ cái vui nhộn cho một chiến dịch ra mắt thức ăn trẻ em. Nền xanh lam giữ hệ thống lại với nhau, trong khi màu sắc nguyên liệu, chi tiết vẽ tay và nhãn dán các cột mốc mang lại sự ấm áp và khám phá.","Naturally\\nfull of life.":"Tự nhiên\\ntràn đầy sức sống.","A launch identity carried through the feeding box, packaging panels and social campaign.":"Một bộ nhận diện ra mắt được áp dụng trên hộp ăn, các mặt bao bì và chiến dịch mạng xã hội.","A natural beginning":"Khởi đầu tự nhiên","Real ingredients become the starting point for a friendly visual language.":"Nguyên liệu thật trở thành điểm khởi đầu cho một ngôn ngữ hình ảnh thân thiện.","Letters with flavour":"Những chữ cái có hương vị","Fruit and vegetable typography gives each side of the box its own character.":"Nghệ thuật chữ từ trái cây và rau củ mang lại cho mỗi mặt hộp một đặc trưng riêng.","Ready for launch":"Sẵn sàng ra mắt","The packaging identity extends into a family of campaign posts.":"Bộ nhận diện bao bì mở rộng thành một chuỗi bài đăng chiến dịch.","Packaging system":"Hệ thống bao bì","Front, back and side panels together show the complete packaging system.":"Các mặt trước, sau và hai bên cùng nhau thể hiện toàn bộ hệ thống bao bì.","Launch messages and product combinations share the blue, cream and ingredient palette.":"Thông điệp ra mắt và các kết hợp sản phẩm chia sẻ bảng màu xanh, kem và màu nguyên liệu.","Bring the warmth of the kitchen into the frame.":"Mang sự ấm áp của gian bếp vào khung hình.","Maggi becomes a companion in the kitchen. A tactile background, expressive headline and bold yellow brand colour connect the main visual, commerce applications and food photography.":"Maggi trở thành người bạn đồng hành trong gian bếp. Nền có kết cấu, tiêu đề biểu cảm và màu vàng thương hiệu đậm kết nối hình ảnh chính, ứng dụng thương mại và nhiếp ảnh ẩm thực.","Good food.\\nShared stories.":"Món ăn ngon.\\nCâu chuyện sẻ chia.","A connected set of key visuals, commerce modules and food imagery.":"Một bộ hình ảnh chủ đạo, module thương mại và hình ảnh ẩm thực được kết nối với nhau.","The product range and a shared-meal setting establish the campaign message.":"Các dòng sản phẩm và bối cảnh bữa ăn chung thiết lập nên thông điệp chiến dịch.","Across the shelf":"Xuyên suốt quầy hàng","The central composition adapts into promotional banners and commerce modules.":"Bố cục trung tâm biến tấu thành các banner khuyến mãi và module thương mại.","Food in focus":"Tâm điểm ẩm thực","Ingredients, hands and dishes tell the food story through photographs.":"Nguyên liệu, đôi bàn tay và món ăn kể câu chuyện ẩm thực qua những bức ảnh.","Social & e-commerce":"Mạng xã hội & thương mại điện tử","The main visual sits alongside its promotional adaptations.":"Hình ảnh chính đặt cạnh các biến thể khuyến mãi.","From preparation…":"Từ khâu chuẩn bị…","A three-column sequence follows ingredients, cooking and plating.":"Một chuỗi 3 cột theo sát nguyên liệu, quá trình nấu nướng và trang trí đĩa.","…to the final plate":"…đến món ăn hoàn chỉnh","The finished dishes form a companion grid.":"Các món ăn hoàn chỉnh tạo thành một mạng lưới đồng hành.","Campaign banner":"Banner chiến dịch","The same visual language in a horizontal format.":"Cùng một ngôn ngữ hình ảnh trong định dạng ngang.","Voucher / 01":"Voucher / 01","Voucher / 02":"Voucher / 02","Voucher / 03":"Voucher / 03","Voucher / 04":"Voucher / 04","Offer modules from the campaign artwork.":"Các module ưu đãi từ hình ảnh chiến dịch.","Make the feeling visible.":"Biến cảm xúc thành hình ảnh.","A storyboard and styling exploration for Skinology. Texture, light and clear geometry bring a clinical yet sensorial world to life, focusing on how the product feels on the skin.":"Một bản nháp kịch bản và khám phá phong cách cho Skinology. Kết cấu, ánh sáng và hình học rõ ràng mang một thế giới lâm sàng nhưng đầy cảm giác vào cuộc sống, tập trung vào cảm giác của sản phẩm trên da.","Clinical precision.\\nSensorial touch.":"Độ chính xác lâm sàng.\\nChạm tới cảm xúc.","A visual direction and storyboard sequence establishing the brand world.":"Định hướng hình ảnh và chuỗi kịch bản thiết lập nên thế giới thương hiệu.","The visual world":"Thế giới hình ảnh","Soft light, water details and clean geometric surfaces form the foundation of the identity.":"Ánh sáng mềm mại, chi tiết nước và các bề mặt hình học sạch sẽ tạo nên nền tảng của bộ nhận diện.","Form and texture":"Hình dáng và kết cấu","Close-ups focus on the product consistency and how it interacts with the skin.":"Các góc chụp cận cảnh tập trung vào độ đặc của sản phẩm và cách nó tương tác với làn da.","Sequence & rhythm":"Trình tự & nhịp điệu","The storyboard moves from establishing wide shots to intimate tactile moments.":"Kịch bản chuyển từ các góc máy rộng mở đầu đến những khoảnh khắc xúc giác gần gũi.","Mood & styling":"Cảm xúc & phong cách","A curated grid of textures, light references and product moments.":"Một lưới chọn lọc gồm kết cấu, tham chiếu ánh sáng và khoảnh khắc sản phẩm.","Storyboard flow":"Luồng kịch bản","The full sequence, outlining the narrative pace and visual transitions.":"Toàn bộ chuỗi sự kiện, phác thảo nhịp điệu kể chuyện và các chuyển đổi hình ảnh.","Tactile moments":"Khoảnh khắc xúc giác","A closer look at the selected detail frames from the sequence.":"Nhìn cận cảnh vào các khung hình chi tiết được chọn từ chuỗi kịch bản.","Keep the product the hero across every format.":"Giữ sản phẩm luôn là tâm điểm ở mọi định dạng.","An e-commerce system built for consistency. A strong product focus, a clear information hierarchy and a modular layout approach ensure the campaign adapts easily across banners, social posts and product detail pages.":"Một hệ thống thương mại điện tử xây dựng vì sự nhất quán. Sự tập trung mạnh vào sản phẩm, hệ thống thông tin rõ ràng và phương pháp bố cục module đảm bảo chiến dịch dễ dàng thích ứng qua các banner, bài đăng mạng xã hội và trang chi tiết sản phẩm.","Structured for\\ncommerce.":"Cấu trúc dành cho\\nthương mại.","A modular visual system applied to key visuals, banners and mobile product pages.":"Một hệ thống hình ảnh module được áp dụng cho hình ảnh chủ đạo, banner và trang sản phẩm trên điện thoại.","Brand & campaign":"Thương hiệu & chiến dịch","Distinct brand worlds connected by a clear product-first hierarchy.":"Các thế giới thương hiệu riêng biệt được kết nối bằng hệ thống phân cấp ưu tiên sản phẩm rõ ràng.","Key visual systems":"Hệ thống hình ảnh chủ đạo","Campaign messages, product groupings and promotional accents across formats.":"Thông điệp chiến dịch, nhóm sản phẩm và điểm nhấn khuyến mãi qua các định dạng.","The mobile journey":"Hành trình trên di động","Product information unfolds in a vertical sequence for mobile shopping.":"Thông tin sản phẩm được hé lộ theo chuỗi dọc dành cho mua sắm trên di động.","Brand moments":"Khoảnh khắc thương hiệu","Nutrition and ice-cream visuals open the collection.":"Hình ảnh dinh dưỡng và kem mở đầu bộ sưu tập.","Campaign collection":"Bộ sưu tập chiến dịch","Six campaign compositions retain their original two-row arrangement.":"6 bố cục chiến dịch giữ nguyên sắp xếp 2 hàng ban đầu.","Product detail pages":"Trang chi tiết sản phẩm","Mobile product stories shown side by side.":"Câu chuyện sản phẩm trên di động được hiển thị cạnh nhau.","Maggi commerce":"Thương mại Maggi","The hero visual expands into banners, offers and voucher modules.":"Hình ảnh chính mở rộng thành các banner, ưu đãi và module voucher.","Product information":"Thông tin sản phẩm","A family of product detail layouts with consistent information hierarchy.":"Một nhóm các bố cục chi tiết sản phẩm với hệ thống phân cấp thông tin nhất quán."};
+  if (dictionary[p.question]) p.question_vi = dictionary[p.question];
+  if (dictionary[p.idea]) p.idea_vi = dictionary[p.idea];
+  if (dictionary[p.statement]) p.statement_vi = dictionary[p.statement];
+  if (dictionary[p.outcome]) p.outcome_vi = dictionary[p.outcome];
+  
+  p.stages.forEach(s => {
+    if (dictionary[s.title]) s.title_vi = dictionary[s.title];
+    if (dictionary[s.text]) s.text_vi = dictionary[s.text];
+  });
+  
+  p.gallery.forEach(s => {
+    if (dictionary[s.title]) s.title_vi = dictionary[s.title];
+    if (dictionary[s.text]) s.text_vi = dictionary[s.text];
+  });
+});
