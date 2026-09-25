@@ -164,7 +164,7 @@ export default function ProjectStory({ project, nextProject }: { project: Projec
     </section>
     <nav className="chapter-nav" aria-label="Project chapters">{chapters.map((chapter, index) => <button key={chapter.id} onClick={() => goTo(index)} aria-label={`Go to ${chapter.label}`} aria-current={active === index ? 'location' : undefined}><span>{isVi && chapter.label_vi ? chapter.label_vi : chapter.label}</span><i /></button>)}</nav>
     <motion.div className="story-guide" animate={reduced ? { x: '88vw', y: '25vh' } : { x: anchor.x, y: anchor.y }} transition={reduced ? { duration: 0 } : { type: 'spring', stiffness: 52, damping: 15 }}>
-      <button onClick={() => goTo(Math.min(active + 1, chapters.length - 1))} aria-label={`Continue`}><span className="guide-bubble">{isVi && chapters[active].hint_vi ? chapters[active].hint_vi : chapters[active].hint}</span><span><FollowMascot anchorX={anchor.x} /></span></button>
+      <button onClick={() => goTo(Math.min(active + 1, chapters.length - 1))} aria-label={`Continue`}><span className="guide-bubble">{isVi && chapters[active].hint_vi ? chapters[active].hint_vi : chapters[active].hint}</span><span><FollowMascot anchorX={typeof anchor.x === "number" ? anchor.x : 0} /></span></button>
     </motion.div>
     <div className="story-utilities"><span className="reading-count mono">{String(percent).padStart(3, '0')} / 100</span><MotionToggle /></div>
     <dialog className="art-dialog" ref={dialog} onCancel={() => setArtOpen(null)} onClick={event => { if (event.target === event.currentTarget) setArtOpen(null); }} aria-label={`${project.name} artwork preview`}>
