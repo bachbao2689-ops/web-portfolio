@@ -6,7 +6,7 @@ import { AnimatePresence, motion, useMotionValueEvent, useScroll, useTransform }
 import { ArrowDown, ArrowLeft, ArrowUpRight, Maximize2, X } from 'lucide-react';
 import { chapters, projects, type Project } from '@/data/projects';
 import ProjectGlyph from './ProjectGlyph';
-import StudyArtwork from './StudyArtwork';
+import ProjectImage from './ProjectImage';
 import { MotionToggle, useMotionPreference } from './MotionPreference';
 import Mascot from './Mascot';
 import ShowcaseSection from './ShowcaseSection';
@@ -63,7 +63,7 @@ function DirectionSequence({ project }: { project: Project }) {
           </div>
         </div>
         <figure className="direction-art">
-          <div className="art-layers">{phases.map((_, index) => <motion.div key={index} className="art-layer" aria-hidden={phase !== index} animate={{ opacity: phase === index ? 1 : 0 }} transition={{ duration: reduced ? 0 : .55 }}><StudyArtwork variant={project.variant} phase={index} /></motion.div>)}</div>
+          <div className="art-layers">{phases.map((_, index) => <motion.div key={index} className="art-layer" aria-hidden={phase !== index} animate={{ opacity: phase === index ? 1 : 0 }} transition={{ duration: reduced ? 0 : .55 }}><ProjectImage project={project} phase={index} /></motion.div>)}</div>
           <figcaption className="mono"><span>{stage.caption}</span><span>Visual study</span></figcaption>
         </figure>
       </div>
@@ -139,7 +139,7 @@ export default function ProjectStory({ project, nextProject }: { project: Projec
         <div className="hero-meta mono"><span>Concept study</span><span>0{project.variant + 1} — 0{projects.length}</span></div>
       </div>
       <motion.figure className="hero-artwork" initial={{ opacity: 0, rotate: reduced ? 0 : 4, y: reduced ? 0 : 45 }} animate={{ opacity: 1, rotate: -3, y: 0 }} transition={{ duration: .9, delay: reduced ? 0 : .15, ease: [.22, 1, .36, 1] }}>
-        <button onClick={() => setArtOpen(true)} className="artwork-open" aria-label={`Enlarge ${project.name} visual study`}><StudyArtwork variant={project.variant} /><span className="artwork-expand"><Maximize2 size={18} /></span></button>
+        <button onClick={() => setArtOpen(true)} className="artwork-open" aria-label={`Enlarge ${project.name} visual study`}><ProjectImage project={project} phase={0} /><span className="artwork-expand"><Maximize2 size={18} /></span></button>
         <figcaption className="mono">A visual study / {project.name}<ArrowUpRight size={15} /></figcaption>
       </motion.figure>
       <div className="hero-bottom mono"><span>Scroll to discover the thinking</span><span>Layout prototype · Illustrative artwork</span></div>
@@ -176,7 +176,7 @@ export default function ProjectStory({ project, nextProject }: { project: Projec
     </motion.div>
     <div className="story-utilities"><span className="reading-count mono">{String(percent).padStart(3, '0')} / 100</span><MotionToggle /></div>
     <dialog className="art-dialog" ref={dialog} onCancel={() => setArtOpen(false)} onClick={event => { if (event.target === event.currentTarget) setArtOpen(false); }} aria-label={`${project.name} artwork preview`}>
-      <button className="dialog-close" onClick={() => setArtOpen(false)} aria-label="Close artwork preview"><X size={24} /></button><StudyArtwork variant={project.variant} /><p className="mono">Illustrative artwork · {project.name}</p>
+      <button className="dialog-close" onClick={() => setArtOpen(false)} aria-label="Close artwork preview"><X size={24} /></button><ProjectImage project={project} phase={0} /><p className="mono">Illustrative artwork · {project.name}</p>
     </dialog>
   </main>;
 }
