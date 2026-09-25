@@ -120,7 +120,7 @@ export default function ProjectStory({ project, nextProject }: { project: Projec
   return <main className={`story-page ${active === 4 ? 'chapter-dark' : ''}`}>
     <a className="skip-link" href="#idea">{isVi ? 'Nhảy đến nội dung' : 'Skip to project story'}</a>
     <header className="story-header">
-      <Link href="/" className="wordmark" aria-label="BART home"> <img src="/assets/logo.svg" alt="BART" style={{ height: "32px", width: "auto" }} /> </Link>
+      <Link href="/" className="wordmark" aria-label="BART home"> <img src={process.env.NODE_ENV === "production" ? "/web-portfolio/assets/logo.svg" : "/assets/logo.svg"} alt="BART" style={{ height: "32px", width: "auto" }} /> </Link>
       <span className="header-project mono">0{project.variant + 1} / {project.name}</span>
       <nav><Link href="/#project-index" className="all-projects-link">{isVi ? 'Tất cả dự án' : 'All projects'}</Link><Link href="/" className="header-close"><span>{isVi ? 'Về trang chủ' : 'Back to index'}</span><ArrowUpRight size={17} /></Link></nav>
       <motion.div className="reading-progress" style={{ scaleX: scrollYProgress }} />
@@ -159,7 +159,7 @@ export default function ProjectStory({ project, nextProject }: { project: Projec
     </section>
     <section className="next-section" id="next-project">
       <div className="content-width"><p className="eyebrow">( {isVi ? 'Một câu chuyện khác?' : 'One more story?'} )</p><Link className="next-project-link" href={`/projects/${nextProject.slug}`}><div className="next-glyph"><ProjectGlyph variant={nextProject.variant} /></div><div><span className="mono">{isVi ? 'Tiếp theo' : 'Up next'} / 0{nextProject.variant + 1}</span><h2>{nextProject.name}</h2></div><ArrowUpRight className="next-arrow" /></Link>
-        <footer className="story-footer"><Link href="/" className="wordmark"> <img src="/assets/logo.svg" alt="BART" style={{ height: "32px", width: "auto" }} /> </Link><Link href="/#project-index"><ArrowLeft size={15} /> {isVi ? 'Tất cả dự án' : 'All projects'}</Link><span className="mono">Portfolio / 2026</span></footer>
+        <footer className="story-footer"><Link href="/" className="wordmark"> <img src={process.env.NODE_ENV === "production" ? "/web-portfolio/assets/logo.svg" : "/assets/logo.svg"} alt="BART" style={{ height: "32px", width: "auto" }} /> </Link><Link href="/#project-index"><ArrowLeft size={15} /> {isVi ? 'Tất cả dự án' : 'All projects'}</Link><span className="mono">Portfolio / 2026</span></footer>
       </div>
     </section>
     <nav className="chapter-nav" aria-label="Project chapters">{chapters.map((chapter, index) => <button key={chapter.id} onClick={() => goTo(index)} aria-label={`Go to ${chapter.label}`} aria-current={active === index ? 'location' : undefined}><span>{isVi && chapter.label_vi ? chapter.label_vi : chapter.label}</span><i /></button>)}</nav>

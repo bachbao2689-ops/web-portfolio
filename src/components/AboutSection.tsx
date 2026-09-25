@@ -28,7 +28,7 @@ export default function AboutSection() {
         viewport={{ once: true, amount: .2 }} transition={{ duration: .7, delay: reduced ? 0 : .12, ease: [.22, 1, .36, 1] }}>
         <div className="about-identity">
           <div><p className="mono">{isVi ? 'Xin chào, tôi là' : 'Hello, I’m'}</p><h3>{profile.name}<span aria-hidden="true">*</span></h3><p className="about-role">{profile.role}</p></div>
-          <motion.div className="about-mark" aria-hidden="true" whileHover={reduced ? {} : { rotate: 20 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}><img src="/assets/chibi.svg" alt="Bach Bao Avatar" style={{ width: "100%", height: "100%", objectFit: "contain" }} /></motion.div>
+          <motion.div className="about-mark" aria-hidden="true" whileHover={reduced ? {} : { rotate: 20 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}><img src={process.env.NODE_ENV === "production" ? "/web-portfolio/assets/chibi.svg" : "/assets/chibi.svg"} alt="Bach Bao Avatar" style={{ width: "100%", height: "100%", objectFit: "contain" }} /></motion.div>
         </div>
         <p className="about-introduction">{isVi && profile.introduction_vi ? profile.introduction_vi : profile.introduction}</p>
         <p className="about-approach">{isVi && profile.approach_vi ? profile.approach_vi : profile.approach}</p>

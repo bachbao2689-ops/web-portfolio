@@ -51,7 +51,7 @@ export default function ProjectSelector() {
     <a className="skip-link" href="#project-picker">{isVi ? 'Nhảy đến dự án' : 'Skip to projects'}</a>
     <section className="project-lobby" aria-label="Choose a project">
       <header className="lobby-header">
-        <Link href="/" className="wordmark" aria-label="BART home"> <img src="/assets/logo.svg" alt="BART" style={{ height: "32px", width: "auto" }} /> </Link>
+        <Link href="/" className="wordmark" aria-label="BART home"> <img src={process.env.NODE_ENV === "production" ? "/web-portfolio/assets/logo.svg" : "/assets/logo.svg"} alt="BART" style={{ height: "32px", width: "auto" }} /> </Link>
         <span className="header-role mono">Senior Art</span>
         <div className="header-end"><a className="about-nav-link" href="#about">{isVi ? 'Giới thiệu' : 'About me'}</a><LanguageToggle /><MotionToggle /><span className="edition mono">Portfolio / 2026</span></div>
       </header>
@@ -109,7 +109,7 @@ export default function ProjectSelector() {
         <div className="index-art" style={{ backgroundColor: item.accent }}><ProjectImage image={item.cover} priority={selected === index} sizes="(max-width: 700px) 88vw, 43vw" /><span className="index-open"><ArrowUpRight size={24} /></span></div>
         <div className="index-card-info"><span className="mono">0{index + 1}</span><div><h3>{item.name}</h3><p>{isVi && item.category_vi ? item.category_vi : item.category}</p></div><ArrowUpRight size={21} /></div>
       </Link>)}</div>
-      <div className="index-footer"><Link href="/" className="wordmark"> <img src="/assets/logo.svg" alt="BART" style={{ height: "32px", width: "auto" }} /> </Link><a href="#top" onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: reduced ? 'instant' : 'smooth' }); }}>{isVi ? 'Trở về đầu trang ↑' : 'Back to the beginning ↑'}</a></div>
+      <div className="index-footer"><Link href="/" className="wordmark"> <img src={process.env.NODE_ENV === "production" ? "/web-portfolio/assets/logo.svg" : "/assets/logo.svg"} alt="BART" style={{ height: "32px", width: "auto" }} /> </Link><a href="#top" onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: reduced ? 'instant' : 'smooth' }); }}>{isVi ? 'Trở về đầu trang ↑' : 'Back to the beginning ↑'}</a></div>
     </section>
   </main>;
 }
