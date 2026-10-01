@@ -1,4 +1,6 @@
-'use client';
+const fs = require('fs');
+
+const content = `'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -115,13 +117,13 @@ export default function NestlePtitStory({ project, nextProject }: { project: Pro
                       <Reveal delay={0.1}>
                           <p className="mono" style={{ marginBottom: '16px', color: '#888', fontSize: '12px', textTransform: 'uppercase' }}>2D Design Panel (Upload riêng ảnh 2D vào đây sau)</p>
                           <div style={{ width: '100%', aspectRatio: '4/3', borderRadius: '12px', overflow: 'hidden', background: '#161616' }}>
-                              <img src={process.env.NODE_ENV === 'production' ? `/web-portfolio${packagingImage.src}` : packagingImage.src} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '20px' }} alt="2D Panel" />
+                              <img src={process.env.NODE_ENV === 'production' ? \`/web-portfolio\${packagingImage.src}\` : packagingImage.src} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '20px' }} alt="2D Panel" />
                           </div>
                       </Reveal>
                       <Reveal delay={0.3}>
                           <p className="mono" style={{ marginBottom: '16px', color: '#888', fontSize: '12px', textTransform: 'uppercase' }}>Product Mockup 3D (Upload riêng ảnh 3D vào đây sau)</p>
                           <div style={{ width: '100%', aspectRatio: '4/3', borderRadius: '12px', overflow: 'hidden', background: '#161616' }}>
-                              <img src={process.env.NODE_ENV === 'production' ? `/web-portfolio${packagingImage.src}` : packagingImage.src} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '20px' }} alt="Mockup" />
+                              <img src={process.env.NODE_ENV === 'production' ? \`/web-portfolio\${packagingImage.src}\` : packagingImage.src} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '20px' }} alt="Mockup" />
                           </div>
                       </Reveal>
                   </div>
@@ -139,10 +141,10 @@ export default function NestlePtitStory({ project, nextProject }: { project: Pro
                       <div style={{ width: '100vw', marginLeft: '50%', transform: 'translateX(-50%)', overflowX: 'auto', scrollSnapType: 'x mandatory', cursor: 'grab', background: '#050505', padding: '40px 0', display: 'flex', gap: '20px' }} className="hide-scrollbar">
                           {/* We make the image huge inside a scrolling container to allow interaction */}
                           <div style={{ scrollSnapAlign: 'center', flex: '0 0 auto', width: '90vw', maxWidth: '1200px', marginLeft: '5vw' }}>
-                              <img src={process.env.NODE_ENV === 'production' ? `/web-portfolio${motionImage.src}` : motionImage.src} style={{ width: '200%', maxWidth: 'none', height: 'auto', display: 'block', objectFit: 'cover', objectPosition: 'left' }} draggable={false} alt="Storyboard 1" />
+                              <img src={process.env.NODE_ENV === 'production' ? \`/web-portfolio\${motionImage.src}\` : motionImage.src} style={{ width: '200%', maxWidth: 'none', height: 'auto', display: 'block', objectFit: 'cover', objectPosition: 'left' }} draggable={false} alt="Storyboard 1" />
                           </div>
                           <div style={{ scrollSnapAlign: 'center', flex: '0 0 auto', width: '90vw', maxWidth: '1200px', marginRight: '5vw' }}>
-                              <img src={process.env.NODE_ENV === 'production' ? `/web-portfolio${motionImage.src}` : motionImage.src} style={{ width: '200%', maxWidth: 'none', height: 'auto', display: 'block', objectFit: 'cover', objectPosition: 'right', marginLeft: '-100%' }} draggable={false} alt="Storyboard 2" />
+                              <img src={process.env.NODE_ENV === 'production' ? \`/web-portfolio\${motionImage.src}\` : motionImage.src} style={{ width: '200%', maxWidth: 'none', height: 'auto', display: 'block', objectFit: 'cover', objectPosition: 'right', marginLeft: '-100%' }} draggable={false} alt="Storyboard 2" />
                           </div>
                       </div>
                   </Reveal>
@@ -165,7 +167,7 @@ export default function NestlePtitStory({ project, nextProject }: { project: Pro
                       </Reveal>
                       <Reveal delay={0.4}>
                           <p style={{ fontSize: '1.25rem', lineHeight: 1.7, color: '#aaa' }}>
-                              {isVi ? "Các ấn phẩm mạng xã hội được thiết kế dọc tối ưu cho thiết bị di động, đảm bảo nhân vật P'tit và sản phẩm luôn nổi bật trên news feed." : "Social posts were optimized for mobile vertical viewing, ensuring the P'tit character and product pop out on the feed."}
+                              {isVi ? 'Các ấn phẩm mạng xã hội được thiết kế dọc tối ưu cho thiết bị di động, đảm bảo nhân vật P\'tit và sản phẩm luôn nổi bật trên news feed.' : 'Social posts were optimized for mobile vertical viewing, ensuring the P\'tit character and product pop out on the feed.'}
                           </p>
                       </Reveal>
                   </div>
@@ -195,7 +197,7 @@ export default function NestlePtitStory({ project, nextProject }: { project: Pro
       {/* Up Next */}
       <section className="next-project" style={{ padding: '100px 5%', backgroundColor: '#000', color: '#fff' }}>
         <Reveal className="content-width">
-            <Link href={`/projects/${nextProject.slug}`} className="next-link">
+            <Link href={\`/projects/\${nextProject.slug}\`} className="next-link">
                 <div className="next-heading"><p className="eyebrow">05 / {isVi ? 'Tiếp theo' : 'Up next'}</p><h2>{nextProject.name}</h2></div>
                 <div className="next-cover"><ProjectImage image={nextProject.cover} sizes="(max-width: 700px) 90vw, 40vw" /></div>
             </Link>
@@ -208,9 +210,12 @@ export default function NestlePtitStory({ project, nextProject }: { project: Pro
         {artOpen && <>
             <button className="dialog-close" onClick={() => setArtOpen(null)}><X size={24} color="#fff" /></button>
             <ProjectImage image={artOpen} sizes="95vw" />
-            <div className="dialog-caption"><p className="mono" style={{ color: '#aaa' }}>{artOpen.alt}</p><a href={process.env.NODE_ENV === 'production' ? `/web-portfolio${artOpen.src}` : artOpen.src} target="_blank" rel="noreferrer" style={{ color: '#b8e7f1' }}>Open full image ↗</a></div>
+            <div className="dialog-caption"><p className="mono" style={{ color: '#aaa' }}>{artOpen.alt}</p><a href={process.env.NODE_ENV === 'production' ? \`/web-portfolio\${artOpen.src}\` : artOpen.src} target="_blank" rel="noreferrer" style={{ color: '#b8e7f1' }}>Open full image ↗</a></div>
         </>}
       </dialog>
     </main>
   );
 }
+`;
+
+fs.writeFileSync('src/components/NestlePtitStory.tsx', content);
