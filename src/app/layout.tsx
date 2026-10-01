@@ -1,4 +1,4 @@
-import GlobalNav from "@/components/GlobalNav";
+
 
 import type { Metadata } from 'next';
 import { MotionPreference } from '@/components/MotionPreference';
@@ -11,5 +11,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en" data-scroll-behavior="smooth"><body><noscript><style>{`[data-reveal], .hero-artwork, .hero-copy h1 { opacity: 1 !important; transform: none !important; }`}</style></noscript><LanguageProvider><MotionPreference><GlobalNav />{children}</MotionPreference></LanguageProvider></body></html>;
+  return <html lang="en" data-scroll-behavior="smooth"><body><noscript><style>{`[data-reveal], .hero-artwork, .hero-copy h1 { opacity: 1 !important; transform: none !important; }`}</style></noscript><LanguageProvider><MotionPreference>{children}</MotionPreference></LanguageProvider></body></html>;
 }
