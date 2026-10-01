@@ -566,3 +566,27 @@ html[data-motion='off'] *,html[data-motion='off'] *::before,html[data-motion='of
   object-fit: cover;
   filter: blur(8px) saturate(1.2);
 }
+
+/* Nestle Custom Layout Additions */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.social-mobile-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .mascot-column {
+    display: none; /* Hide sticky mascot on mobile to save space */
+  }
+  .content-column {
+    border-left: none !important;
+    padding: 0 0 60px !important;
+  }
+}
