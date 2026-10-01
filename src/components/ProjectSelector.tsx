@@ -86,6 +86,7 @@ export default function ProjectSelector() {
         <p>{isVi && project.category_vi ? project.category_vi : project.category}</p>
       </div>
       <div className="lobby-bottom" id="project-picker">
+        <div className="project-keyboard-hint mono" aria-hidden="true" style={{ textAlign: "center", marginBottom: "8px", opacity: 0.5, fontSize: "10px" }}>{isVi ? "Kéo hou1eb7c du00f9ng u2190 u2192 u0111u1ec3 u0111u1ed5i du1ef1 u00e1n" : "Swipe or use u2190 u2192 to navigate"}</div>
         <div className="project-dock" role="group" aria-label="Select a project">
           <button className="dock-arrow" aria-label="Previous project" onClick={() => select(selected - 1)}><ChevronLeft size={19} /></button>
           <div className="dock-projects" ref={dock}>

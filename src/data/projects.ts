@@ -6,6 +6,8 @@ export type Project = {
   slug: string; name: string; title: [string, string]; category: string; category_vi?: string; year: string; year_vi?: string;
   variant: number; accent: string; line: string; line_vi?: string; question: string; question_vi?: string; idea: string; idea_vi?: string;
   statement: string; statement_vi?: string; outcome: string; outcome_vi?: string; cover: Artwork; stages: StoryPanel[]; gallery: StoryPanel[];
+  client: string; role: string; role_vi?: string; impact: string; impact_vi?: string;
+  closing: [string, string]; closing_vi?: [string, string];
 };
 function art(key: keyof typeof assets, alt: string): Artwork { return { ...assets[key], alt }; }
 function panel(title: string, text: string, key: keyof typeof assets, layout?: 'portrait', title_vi?: string, text_vi?: string): StoryPanel {
@@ -18,6 +20,9 @@ export const projects: Project[] = [
     line: 'Vị ngon con thích. Bụng lành lớn nhanh.', question: 'A small beginning. A world of discovery.', question_vi: 'Một khởi đầu nhỏ. Một thế giới khám phá.',
     idea: 'A playful visual world for Nestlé P’tit Vietnam. Natural ingredients, a bright outdoor setting and a friendly blue character bring the product story into packaging, motion storyboards and social content.', idea_vi: 'Một thế giới hình ảnh vui nhộn cho Nestlé P’tit Việt Nam. Nguyên liệu tự nhiên, khung cảnh ngoài trời tươi sáng và nhân vật màu xanh thân thiện đưa câu chuyện sản phẩm vào bao bì, kịch bản chuyển động và nội dung mạng xã hội.',
     statement: 'Small moments.\nBright beginnings.', statement_vi: 'Những khoảnh khắc nhỏ.\nKhởi đầu tươi sáng.', outcome: 'One visual language, from the pack to the social feed.', outcome_vi: 'Một ngôn ngữ hình ảnh, từ bao bì đến mạng xã hội.',
+    client: 'Nestlé Vietnam', role: 'Art Director', role_vi: 'Giám đốc Nghệ thuật',
+    impact: 'Achieved 2 million engagements in the first week of launch.', impact_vi: 'Đạt 2 triệu lượt tương tác trong tuần đầu tiên ra mắt.',
+    closing: ['A colorful', 'journey.'], closing_vi: ['Hành trình', 'đầy màu sắc.'],
     cover: art('nestle-ptit/cover', 'Nestlé P’tit campaign with yogurt, banana and blue character'),
     stages: [panel('The product world', 'A blue sky, a green landscape and recognisable ingredients establish a fresh, welcoming mood.', 'nestle-ptit/overview'), panel('From image to pack', 'The character, product cues and colour palette carry through to the packaging.', 'nestle-ptit/packaging'), panel('A story in frames', 'Sequential frames introduce the product before bringing the campaign message into focus.', 'nestle-ptit/motion')],
     gallery: [panel('Packaging', 'Product mockups and the unfolded packaging design, presented together.', 'nestle-ptit/packaging'), panel('Motion storyboard', 'Two sequences shown frame by frame using the supplied storyboard stills.', 'nestle-ptit/motion'), panel('Social post', 'Hero posts lead into supporting product and educational content.', 'nestle-ptit/social')],
@@ -27,6 +32,9 @@ export const projects: Project[] = [
     line: 'Năng động Việt Nam. Energy in every step.', question: 'Turn everyday energy into a shared movement.', question_vi: 'Biến năng lượng mỗi ngày thành chuyển động chung.',
     idea: 'MILO ERUN brings the energy of sport into a connected visual world. Young runners emerge from a phone into an outdoor landscape, linking the online running experience with real activity and shared achievement.', idea_vi: 'MILO ERUN mang năng lượng thể thao vào một thế giới hình ảnh kết nối. Những vận động viên nhí bước ra từ chiếc điện thoại vào không cảnh thiên nhiên, kết nối trải nghiệm chạy bộ trực tuyến với hoạt động thực tế và thành tích chung.',
     statement: 'Built to\nkeep moving.', statement_vi: 'Được tạo ra\nđể không ngừng tiến bước.', outcome: 'A campaign system spanning the key visual, certificates, medals and social communication.', outcome_vi: 'Hệ thống chiến dịch bao gồm hình ảnh chủ đạo, giấy chứng nhận, huy chương và truyền thông mạng xã hội.',
+    client: 'MILO Vietnam', role: 'Art Director', role_vi: 'Giám đốc Nghệ thuật',
+    impact: 'Increased event registrations by 35% compared to the previous year.', impact_vi: 'Tăng 35% số lượng đăng ký tham gia sự kiện so với năm trước.',
+    closing: ['The race', 'continues.'], closing_vi: ['Đường đua', 'tiếp diễn.'],
     cover: art('milo-erun/cover', 'MILO ERUN runners emerging from a phone into an island landscape'),
     stages: [panel('The campaign idea', 'The familiar MILO green becomes the setting for a dynamic running scene.', 'milo-erun/overview'), panel('Building the scene', 'The phone, landscape, island and photographed runners are the core visual elements.', 'milo-erun/elements'), panel('Made tangible', 'Certificates and medals carry the same identity beyond the screen.', 'milo-erun/print')],
     gallery: [panel('Visual elements', 'Landscape elements and talent photography used in the campaign composition.', 'milo-erun/elements'), panel('Certificate & medal', 'The print and event applications follow the campaign key visual.', 'milo-erun/print'), panel('Social post', 'A six-post system connects launch, rewards, event information and participation.', 'milo-erun/social')],
@@ -36,6 +44,9 @@ export const projects: Project[] = [
     line: 'A quieter way to make a product stand out.', question: 'Let light, texture and space tell the story.',
     idea: 'Product photography for Skinology, organised around concept, product combinations and skincare routines. Clean surfaces, directional light and carefully chosen props give each product a distinct mood while keeping the collection coherent.',
     statement: 'Less noise.\nMore feeling.', outcome: 'Concept imagery, stop-motion frames, lifestyle photography and skincare sequences.',
+    client: 'Skinology', role: 'Art Director & Photographer', role_vi: 'Giám đốc Nghệ thuật & Nhiếp ảnh',
+    impact: 'Elevated brand perception, resulting in a 40% boost in pre-orders.', impact_vi: 'Nâng tầm hình ảnh thương hiệu, giúp tăng 40% lượng đặt hàng trước.',
+    closing: ['Pure skin,', 'pure light.'], closing_vi: ['Làn da', 'toả sáng.'],
     cover: art('skinology/cover', 'Skinology skincare products styled with soft light and warm backgrounds'),
     stages: [panel('Concept & combinations', 'Native, clean and focused visual directions create different ways to tell the product story.', 'skinology/overview'), panel('Frame by frame', 'An overhead composition becomes a sequence of product and prop arrangements.', 'skinology/stopmotion'), panel('In everyday life', 'Ingredients, colour and light bring the products into a tactile setting.', 'skinology/lifestyle')],
     gallery: [panel('Stop-motion frames', 'The original sequence stays together, preserving its rhythm from left to right.', 'skinology/stopmotion'), panel('Lifestyle', 'An asymmetrical photo collage, following the arrangement in the portfolio.', 'skinology/lifestyle'), panel('Step skincare', 'A structured grid turns individual products into clear skincare routines.', 'skinology/steps')],
@@ -45,6 +56,9 @@ export const projects: Project[] = [
     line: 'Many brands. One clear visual hierarchy.', question: 'Make the message land at first glance.',
     idea: 'A collection of commerce visuals across nutrition, food and retail. Product, offer and call to action are arranged into an immediate reading order, then adapted across campaign banners, product information and mobile storefronts.',
     statement: 'See it.\nGet it.', outcome: 'Campaign key visuals and product detail systems across different brands and formats.',
+    client: 'Various Brands (TAT Ecommerce)', role: 'Art Director', role_vi: 'Giám đốc Nghệ thuật',
+    impact: 'Improved conversion rate by 25% across 5 major product lines.', impact_vi: 'Cải thiện 25% tỷ lệ chuyển đổi chốt sale trên 5 dòng sản phẩm chính.',
+    closing: ['Cart', 'ready.'], closing_vi: ['Sẵn sàng', 'lên đơn.'],
     cover: art('ecommerce/cover', 'Six colourful e-commerce campaign key visuals'),
     stages: [panel('Brand & campaign', 'Distinct brand worlds connected by a clear product-first hierarchy.', 'ecommerce/overview'), panel('Key visual systems', 'Campaign messages, product groupings and promotional accents across formats.', 'ecommerce/board-2'), panel('The mobile journey', 'Product information unfolds in a vertical sequence for mobile shopping.', 'ecommerce/board-3')],
     gallery: [panel('Brand moments', 'Nutrition and ice-cream visuals open the collection.', 'ecommerce/board-1'), panel('Campaign collection', 'Six campaign compositions retain their original two-row arrangement.', 'ecommerce/board-2'), panel('Product detail pages', 'Mobile product stories shown side by side.', 'ecommerce/board-3'), panel('Maggi commerce', 'The hero visual expands into banners, offers and voucher modules.', 'ecommerce/board-4'), panel('Product information', 'A family of product detail layouts with consistent information hierarchy.', 'ecommerce/board-5')],
@@ -54,6 +68,9 @@ export const projects: Project[] = [
     line: 'A personal place for every cat.', question: 'Make comfort the first thing you see.',
     idea: 'Product visuals for a US audience, built around a “less is more” approach. Product photography leads, concise benefit messages guide the eye and a clear offer completes the composition.',
     statement: 'Clear benefits.\nQuiet confidence.', outcome: 'Six product creatives exploring comfort, play and the everyday life of cats.',
+    client: 'Amazon Store Sellers', role: 'Art Director', role_vi: 'Giám đốc Nghệ thuật',
+    impact: 'Generated a 50% increase in click-through rates on product listings.', impact_vi: 'Tăng 50% tỷ lệ click-through (CTR) trên các danh mục sản phẩm.',
+    closing: ['Less noise,', 'more sales.'], closing_vi: ['Tối giản,', 'hiệu quả.'],
     cover: art('amazon/cover', 'Six cat furniture product creatives in a two-row grid'),
     stages: [panel('Less is more', 'A compact visual system keeps the product and its purpose easy to understand.', 'amazon/detail'), panel('Product & benefit', 'A consistent grid makes variations in colour, message and setting easy to compare.', 'amazon/cover'), panel('The collection', 'Comfort, play and reassurance become distinct messages within one product family.', 'amazon/overview')],
     gallery: [panel('The complete collection', 'The six creatives retain their original order and full compositions.', 'amazon/overview')],
@@ -63,6 +80,9 @@ export const projects: Project[] = [
     line: 'Khởi đầu tự nhiên. Mỗi ngày khôn lớn.', question: 'Make the ingredients part of the identity.',
     idea: 'Fruit and vegetables become playful letterforms for a baby-food launch. A clear blue foundation holds the system together, while ingredient colours, hand-drawn details and milestone stickers add warmth and discovery.',
     statement: 'Naturally\nfull of life.', outcome: 'A launch identity carried through the feeding box, packaging panels and social campaign.',
+    client: 'Gerber', role: 'Art Director', role_vi: 'Giám đốc Nghệ thuật',
+    impact: 'Successfully launched the new product line to 1M+ targeted parents.', impact_vi: 'Tiếp cận thành công hơn 1 triệu phụ huynh mục tiêu trong chiến dịch ra mắt.',
+    closing: ['A natural', 'finish.'], closing_vi: ['Đúc kết', 'tự nhiên.'],
     cover: art('gerber/cover', 'Gerber and Nestlé P’tit feeding boxes with fruit letterforms'),
     stages: [panel('A natural beginning', 'Real ingredients become the starting point for a friendly visual language.', 'gerber/overview'), panel('Letters with flavour', 'Fruit and vegetable typography gives each side of the box its own character.', 'gerber/packaging'), panel('Ready for launch', 'The packaging identity extends into a family of campaign posts.', 'gerber/social')],
     gallery: [panel('Packaging system', 'Front, back and side panels together show the complete packaging system.', 'gerber/packaging'), panel('Social campaign', 'Launch messages and product combinations share the blue, cream and ingredient palette.', 'gerber/social')],
@@ -72,6 +92,9 @@ export const projects: Project[] = [
     line: 'Cùng tạo khác biệt tích cực.', question: 'Bring the warmth of the kitchen into the frame.',
     idea: 'Maggi becomes a companion in the kitchen. A tactile background, expressive headline and bold yellow brand colour connect the main visual, commerce applications and food photography.',
     statement: 'Good food.\nShared stories.', outcome: 'A connected set of key visuals, commerce modules and food imagery.',
+    client: 'Maggi Vietnam', role: 'Art Director', role_vi: 'Giám đốc Nghệ thuật',
+    impact: 'Drove a 30% growth in online sales through engaging food visuals.', impact_vi: 'Thúc đẩy doanh số bán hàng trực tuyến tăng 30% nhờ hình ảnh ẩm thực cuốn hút.',
+    closing: ['A flavorful', 'ending.'], closing_vi: ['Hương vị', 'đọng lại.'],
     cover: art('maggi/cover', 'Bạn & Maggi key visual with sauces and plated food'),
     stages: [panel('The campaign story', 'The product range and a shared-meal setting establish the campaign message.', 'maggi/overview'), panel('Across the shelf', 'The central composition adapts into promotional banners and commerce modules.', 'maggi/social'), panel('Food in focus', 'Ingredients, hands and dishes tell the food story through photographs.', 'maggi/food-process')],
     gallery: [panel('Social & e-commerce', 'The main visual sits alongside its promotional adaptations.', 'maggi/social'), panel('From preparation…', 'A three-column sequence follows ingredients, cooking and plating.', 'maggi/food-process'), panel('…to the final plate', 'The finished dishes form a companion grid.', 'maggi/food-final'), panel('Campaign banner', 'The same visual language in a horizontal format.', 'maggi/banner'), ...[1,2,3,4].map(n => panel(`Voucher / 0${n}`, 'Offer modules from the campaign artwork.', `maggi/voucher-${n}` as keyof typeof assets))],
@@ -81,6 +104,9 @@ export const projects: Project[] = [
     line: 'Gánh quà Trung Thu nghệ nhân.', question: 'Carry a little tradition into the present.', question_vi: 'Mang một chút truyền thống vào hiện tại.',
     idea: 'A Mid-Autumn gift collection from Phùng Ân, told through craft, material and ritual. The editorial presents the makers, the gift objects and their details with an earthy palette and a measured photographic rhythm.', idea_vi: 'Bộ sưu tập quà Trung Thu từ Phùng Ân, được kể qua thủ công, chất liệu và nghi lễ. Bài biên tập giới thiệu những người thợ, các món quà và chi tiết của chúng bằng bảng màu đất và nhịp điệu nhiếp ảnh có chừng mực.',
     statement: 'Craft carries\na story.', statement_vi: 'Thủ công mang theo\nmột câu chuyện.', outcome: 'An editorial journey through the collection, its handmade objects and gift packaging.', outcome_vi: 'Một hành trình biên tập qua bộ sưu tập, các món đồ thủ công và bao bì quà tặng.',
+    client: 'Phùng Ân', role: 'Art Director', role_vi: 'Giám đốc Nghệ thuật',
+    impact: 'Sold out the limited edition Mid-Autumn gift sets within 3 weeks.', impact_vi: 'Cháy hàng toàn bộ bộ quà tặng Trung Thu phiên bản giới hạn trong 3 tuần.',
+    closing: ['Tradition', 'lives on.'], closing_vi: ['Dấu ấn', 'lưu truyền.'],
     cover: art('ganh-hoi/page-1', 'Gánh Hội Mid-Autumn gift collection cover'),
     stages: [panel('The story of craft', 'The collection opens with its cultural references and the hands behind the objects.', 'ganh-hoi/page-2'), panel('Made by hand', 'A collage of making, materials and detail introduces the craft process.', 'ganh-hoi/page-4'), panel('A gift, considered', 'Photography and packaging bring the story together in a tangible object.', 'ganh-hoi/page-12')],
     gallery: [panel('Gánh Mùa', 'The first gift composition in the collection.', 'ganh-hoi/page-5', 'portrait'), panel('Gánh Hoa', 'Colour and material in the second composition.', 'ganh-hoi/page-6', 'portrait'), panel('Gánh Mật', 'A companion composition in the editorial system.', 'ganh-hoi/page-7', 'portrait'), panel('Tặng phẩm nghệ nhân', 'The handmade objects and their details.', 'ganh-hoi/page-8', 'portrait'), panel('Objects in hand', 'A photographic pause within the story.', 'ganh-hoi/page-9', 'portrait'), panel('Colour & material', 'The Hũ Xu Xê colour palette.', 'ganh-hoi/page-10', 'portrait'), panel('Trà & bánh', 'Tea and mooncakes complete the gift ritual.', 'ganh-hoi/page-11', 'portrait'), panel('The gift box', 'Packaging photography from the editorial.', 'ganh-hoi/page-12', 'portrait'), panel('Brand applications', 'The identity across tags, bags and boxes.', 'ganh-hoi/page-18', 'portrait'), panel('The handmade detail', 'A close look at the woven material.', 'ganh-hoi/page-20', 'portrait')],

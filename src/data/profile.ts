@@ -12,3 +12,8 @@ export const profile = {
     { title: 'Every detail.', title_vi: 'Trân trọng từng chi tiết.', description: 'The smallest decisions belong to the bigger story.', description_vi: 'Những quyết định nhỏ bé nhất đều đóng góp vào một câu chuyện lớn hơn.' },
   ],
 };
+export const contact = {
+  email: 'bachbao2608@gmail.com',
+  behance: 'https://www.behance.net/gallery/245519605/Portfolio-2026-Bach-Bao',
+  cv: '#'
+};
