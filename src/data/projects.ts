@@ -8,6 +8,7 @@ export type Project = {
   statement: string; statement_vi?: string; outcome: string; outcome_vi?: string; cover: Artwork; stages: StoryPanel[]; gallery: StoryPanel[];
   client: string; role: string; role_vi?: string; impact: string; impact_vi?: string;
   closing: [string, string]; closing_vi?: [string, string];
+  context?: string; context_vi?: string;
 };
 function art(key: keyof typeof assets, alt: string): Artwork { return { ...assets[key], alt }; }
 function panel(title: string, text: string, key: keyof typeof assets, layout?: 'portrait', title_vi?: string, text_vi?: string): StoryPanel {
@@ -23,6 +24,7 @@ export const projects: Project[] = [
     client: 'Nestlé Vietnam', role: 'Art Director', role_vi: 'Giám đốc Nghệ thuật',
     impact: 'Achieved 2 million engagements in the first week of launch.', impact_vi: 'Đạt 2 triệu lượt tương tác trong tuần đầu tiên ra mắt.',
     closing: ['A colorful', 'journey.'], closing_vi: ['Hành trình', 'đầy màu sắc.'],
+    context: 'Nestlé P’tit needed a cohesive visual language to unify its packaging, social media, and motion assets for the Vietnam market, establishing a natural, child-friendly identity.', context_vi: 'Nestlé P’tit cần một ngôn ngữ hình ảnh nhất quán để đồng bộ bao bì, truyền thông mạng xã hội và các ấn phẩm chuyển động tại thị trường Việt Nam, nhằm xây dựng một định vị thương hiệu tự nhiên, gần gũi với trẻ em.',
     cover: art('nestle-ptit/cover', 'Nestlé P’tit campaign with yogurt, banana and blue character'),
     stages: [panel('The product world', 'A blue sky, a green landscape and recognisable ingredients establish a fresh, welcoming mood.', 'nestle-ptit/overview'), panel('From image to pack', 'The character, product cues and colour palette carry through to the packaging.', 'nestle-ptit/packaging'), panel('A story in frames', 'Sequential frames introduce the product before bringing the campaign message into focus.', 'nestle-ptit/motion')],
     gallery: [panel('Packaging', 'Product mockups and the unfolded packaging design, presented together.', 'nestle-ptit/packaging'), panel('Motion storyboard', 'Two sequences shown frame by frame using the supplied storyboard stills.', 'nestle-ptit/motion'), panel('Social post', 'Hero posts lead into supporting product and educational content.', 'nestle-ptit/social')],
