@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowLeft, Maximize2, X, MousePointer2 } from 'lucide-react';
@@ -17,9 +17,39 @@ function Reveal({ children, className = '', delay = 0, y = 40, style }: { childr
 }
 
 export default function NestlePtitStory({ project, nextProject }: { project: Project; nextProject: Project }) {
+  const [activeSection, setActiveSection] = useState(0);
+  const sectionRefs = useRef<(HTMLElement | null)[]>([]);
+  
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const index = Number(entry.target.getAttribute('data-index'));
+          setActiveSection(index);
+        }
+      });
+    }, { rootMargin: '-40% 0px -40% 0px' });
+    
+    sectionRefs.current.forEach(ref => {
+      if (ref) observer.observe(ref);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+
+
   const [artOpen, setArtOpen] = useState<Artwork | null>(null);
   const { lang } = useLanguage(); 
   const isVi = lang === "vi";
+
+  const mascotHints = [
+    isVi ? "Sẵn sàng chưa?" : "Ready?",
+    isVi ? "Bối cảnh..." : "Context...",
+    isVi ? "Ý tưởng lớn!" : "Big idea!",
+    isVi ? "Thực thi thôi!" : "Execution!",
+    isVi ? "Tuyệt vời!" : "Great results!",
+    isVi ? "Xem tiếp nhé!" : "Up next!"
+  ];
 
   const contextImage = project.stages[0]?.image || project.cover;
   const ideaImage = project.stages[1]?.image || project.cover;
@@ -35,7 +65,7 @@ export default function NestlePtitStory({ project, nextProject }: { project: Pro
       </nav>
 
       {/* Hero - Cinematic Dark Transition */}
-      <section style={{ height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', position: 'relative', overflow: 'hidden', backgroundColor: '#005e9e' }}>
+      <section ref={el => { sectionRefs.current[0] = el; }} data-index={0} style={{ height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', position: 'relative', overflow: 'hidden', backgroundColor: '#005e9e' }}>
         <motion.div initial={{ scale: 1.1, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 1.5 }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0, opacity: 0.3 }}>
             <ProjectImage image={project.cover} sizes="100vw" className="nestle-hero-bg" />
             <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '50vh', background: 'linear-gradient(to bottom, transparent, #0a0a0a)' }}></div>
@@ -54,15 +84,23 @@ export default function NestlePtitStory({ project, nextProject }: { project: Pro
         </div>
       </section>
 
+      
       {/* Floating Mascot */}
-      <div style={{ position: 'fixed', bottom: '40px', right: '40px', width: '120px', height: '120px', zIndex: 100, pointerEvents: 'none' }} className="floating-mascot">
-          <FollowMascot anchorX={500} />
+      <div style={{ position: 'fixed', bottom: '40px', right: '40px', width: '90px', height: '90px', zIndex: 100, pointerEvents: 'none', transition: 'all 0.5s ease' }} className="floating-mascot">
+          <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+              <div className="guide-bubble" style={{ position: 'absolute', bottom: '110%', right: '0', background: '#1a1a1a', color: '#b8e7f1', padding: '8px 12px', borderRadius: '12px', fontSize: '12px', whiteSpace: 'nowrap', opacity: 1 }}>
+                  {mascotHints[activeSection]}
+                  <div style={{ content: '""', position: 'absolute', bottom: '-4px', right: '20px', width: '10px', height: '10px', background: '#1a1a1a', transform: 'rotate(45deg)' }}></div>
+              </div>
+              <FollowMascot anchorX={500} />
+          </div>
       </div>
+
 
       <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 5% 120px' }}>
           
           {/* 1. Bối cảnh (Context) - Full-bleed Art */}
-          <section style={{ paddingTop: '120px' }}>
+          <section ref={el => { sectionRefs.current[1] = el; }} data-index={1} style={{ paddingTop: '120px' }}>
               <Reveal>
                   <h2 style={{ fontSize: '12px', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '2px', color: '#005e9e', marginBottom: '24px' }}>01 / {isVi ? 'Bối cảnh' : 'Context'}</h2>
                   <h3 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', lineHeight: 1.1, fontWeight: 700, marginBottom: '32px', color: '#1a1a1a', maxWidth: '900px' }}>
@@ -81,7 +119,7 @@ export default function NestlePtitStory({ project, nextProject }: { project: Pro
           </section>
 
           {/* 2. Ý tưởng (Idea) */}
-          <section style={{ paddingTop: '180px' }}>
+          <section ref={el => { sectionRefs.current[2] = el; }} data-index={2} style={{ paddingTop: '180px' }}>
               <Reveal style={{ textAlign: 'center' }}>
                   <h2 style={{ fontSize: '12px', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '2px', color: '#005e9e', marginBottom: '24px' }}>02 / {isVi ? 'Ý tưởng' : 'The Idea'}</h2>
                   <h3 style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)', lineHeight: 1.1, fontWeight: 700, marginBottom: '32px', color: '#1a1a1a', maxWidth: '1000px', margin: '0 auto 32px' }}>
@@ -100,7 +138,7 @@ export default function NestlePtitStory({ project, nextProject }: { project: Pro
           </section>
 
           {/* 3. Triển khai (Execution) */}
-          <section style={{ paddingTop: '180px' }}>
+          <section ref={el => { sectionRefs.current[3] = el; }} data-index={3} style={{ paddingTop: '180px' }}>
               <Reveal>
                   <h2 style={{ fontSize: '12px', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '2px', color: '#005e9e', marginBottom: '24px' }}>03 / {isVi ? 'Triển khai' : 'Execution'}</h2>
                   <h3 style={{ fontSize: 'clamp(3rem, 6vw, 5rem)', lineHeight: 1.1, fontWeight: 700, color: '#1a1a1a', marginBottom: '100px' }}>
@@ -173,7 +211,7 @@ export default function NestlePtitStory({ project, nextProject }: { project: Pro
       </div>
 
       {/* 4. Kết quả (Outcome) */}
-      <section style={{ padding: '120px 5%', backgroundColor: '#005e9e', color: '#fff', textAlign: 'center', position: 'relative', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      <section ref={el => { sectionRefs.current[4] = el; }} data-index={4} style={{ padding: '120px 5%', backgroundColor: '#005e9e', color: '#fff', textAlign: 'center', position: 'relative', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto', position: 'relative', zIndex: 2 }}>
             <Reveal>
                 <h2 style={{ fontSize: '12px', fontFamily: 'var(--font-mono)', textTransform: 'uppercase', letterSpacing: '2px', color: '#b8e7f1', marginBottom: '24px' }}>04 / {isVi ? 'Kết quả' : 'Outcome'}</h2>
@@ -192,7 +230,7 @@ export default function NestlePtitStory({ project, nextProject }: { project: Pro
       </section>
 
       {/* Up Next */}
-      <section className="next-project" style={{ padding: '100px 5%', backgroundColor: '#000', color: '#fff' }}>
+      <section ref={el => { sectionRefs.current[5] = el; }} data-index={5} className="next-project" style={{ padding: '100px 5%', backgroundColor: '#000', color: '#fff' }}>
         <Reveal className="content-width">
             <Link href={`/projects/${nextProject.slug}`} className="next-link">
                 <div className="next-heading"><p className="eyebrow">05 / {isVi ? 'Tiếp theo' : 'Up next'}</p><h2>{nextProject.name}</h2></div>
