@@ -10,6 +10,12 @@ import FollowMascot from './FollowMascot';
 import ProjectImage from './ProjectImage';
 import { useLanguage } from "./LanguageContext";
 import { MotionToggle, useMotionPreference } from './MotionPreference';
+import { TOUR_STORAGE_KEY, useJourney } from './JourneyContext';
+import GuideDialog from './GuideDialog';
+import { contact } from '@/data/profile';
+
+const TOUR_STOPS = [1, 2, 4];
+type TourStatus = 'manual' | 'intro' | 'tour' | 'paused';
 
 function Reveal({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const { reduced } = useMotionPreference();
@@ -71,10 +77,17 @@ export default function ProjectStory({ project, nextProject }: { project: Projec
   const isVi = lang === "vi";
 
   const { reduced } = useMotionPreference();
+  const { openProject } = useJourney();
   const { scrollYProgress } = useScroll();
   const [active, setActive] = useState(0);
   const [percent, setPercent] = useState(0);
   const [artOpen, setArtOpen] = useState<Artwork | null>(null);
+  const [guideOpen, setGuideOpen] = useState(false);
+  const [tourStatus, setTourStatus] = useState<TourStatus>('manual');
+  const [tourStep, setTourStep] = useState(0);
+  const [pauseCountdown, setPauseCountdown] = useState(7);
+  const pendingTour = useRef<boolean | null>(null);
+  const pauseCard = useRef<HTMLDivElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const rotate = useTransform(scrollYProgress, [0, 1], [0, 280]);
   const [anchor, setAnchor] = useState({ x: '51vw', y: '20vh' });
@@ -112,6 +125,52 @@ export default function ProjectStory({ project, nextProject }: { project: Projec
     window.scrollTo({ top: Math.max(0, top), behavior: reduced ? 'instant' : 'smooth' });
     history.replaceState(null, '', `#${chapters[index].id}`);
   }, [reduced]);
+  useEffect(() => {
+    if (pendingTour.current === null) {
+      try {
+        pendingTour.current = sessionStorage.getItem(TOUR_STORAGE_KEY) === project.slug;
+        if (pendingTour.current) sessionStorage.removeItem(TOUR_STORAGE_KEY);
+      } catch { pendingTour.current = false; }
+    }
+    if (reduced) { pendingTour.current = false; return; }
+    if (!pendingTour.current) return;
+    setTourStep(0);
+    setTourStatus('intro');
+    const start = setTimeout(() => setTourStatus('tour'), 1650);
+    return () => clearTimeout(start);
+  }, [project.slug, reduced]);
+  useEffect(() => {
+    if (tourStatus !== 'tour') return;
+    const move = setTimeout(() => goTo(TOUR_STOPS[tourStep]), 180);
+    const next = setTimeout(() => {
+      if (tourStep === TOUR_STOPS.length - 1) setTourStatus('manual');
+      else setTourStep(step => step + 1);
+    }, tourStep === 0 ? 4200 : 5000);
+    return () => { clearTimeout(move); clearTimeout(next); };
+  }, [goTo, tourStatus, tourStep]);
+  useEffect(() => {
+    if (tourStatus !== 'tour') return;
+    const interrupt = () => setTourStatus('paused');
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setTourStatus('manual');
+      else if (['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', ' ', 'Home', 'End'].includes(event.key)) interrupt();
+    };
+    window.addEventListener('wheel', interrupt, { passive: true });
+    window.addEventListener('touchmove', interrupt, { passive: true });
+    window.addEventListener('keydown', onKey);
+    return () => { window.removeEventListener('wheel', interrupt); window.removeEventListener('touchmove', interrupt); window.removeEventListener('keydown', onKey); };
+  }, [tourStatus]);
+  useEffect(() => {
+    if (tourStatus !== 'paused') return;
+    setPauseCountdown(7);
+    pauseCard.current?.querySelector('button')?.focus();
+    const countdown = setInterval(() => setPauseCountdown(value => Math.max(0, value - 1)), 1000);
+    const finish = setTimeout(() => setTourStatus('manual'), 7000);
+    return () => { clearInterval(countdown); clearTimeout(finish); };
+  }, [tourStatus]);
+  useEffect(() => {
+    if (reduced && tourStatus !== 'manual') setTourStatus('manual');
+  }, [reduced, tourStatus]);
   useEffect(() => {
     if (artOpen) { dialog.current?.showModal(); const previous = document.body.style.overflow; document.body.style.overflow = 'hidden'; return () => { document.body.style.overflow = previous; }; }
     dialog.current?.close();
@@ -158,17 +217,21 @@ export default function ProjectStory({ project, nextProject }: { project: Projec
       <div className="content-width outcome-footer mono"><span>{isVi && project.category_vi ? project.category_vi : project.category}</span><span>BART / {project.year}</span></div>
     </section>
     <section className="next-section" id="next-project">
-      <div className="content-width"><p className="eyebrow">( {isVi ? 'Một câu chuyện khác?' : 'One more story?'} )</p><Link className="next-project-link" href={`/projects/${nextProject.slug}`}><div className="next-glyph"><ProjectGlyph variant={nextProject.variant} /></div><div><span className="mono">{isVi ? 'Tiếp theo' : 'Up next'} / 0{nextProject.variant + 1}</span><h2>{nextProject.name}</h2></div><ArrowUpRight className="next-arrow" /></Link>
+      <div className="content-width"><p className="eyebrow">( {isVi ? 'Một câu chuyện khác?' : 'One more story?'} )</p><Link className="next-project-link" href={`/projects/${nextProject.slug}`} onClick={event => { if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return; event.preventDefault(); openProject(nextProject.slug); }}><div className="next-glyph"><ProjectGlyph variant={nextProject.variant} /></div><div><span className="mono">{isVi ? 'Tiếp theo' : 'Up next'} / 0{nextProject.variant + 1}</span><h2>{nextProject.name}</h2></div><ArrowUpRight className="next-arrow" /></Link>
+        <div className="story-contact"><div><span className="mono">BART / {isVi ? 'Câu chuyện tiếp theo' : 'The next story'}</span><h3>{isVi ? 'Có điều muốn hỏi?' : 'Got a question?'}</h3><p>{isVi ? 'Nhấn vào BART để hỏi nhanh về dự án, hoặc gửi email để bắt đầu câu chuyện của bạn.' : 'Tap BART for quick answers about this project, or email me to start a story of your own.'}</p><a href={`mailto:${contact.email}`}>{isVi ? 'Gửi email' : 'Email me'} <ArrowUpRight size={18} /></a></div><button type="button" className="story-contact-mascot" onClick={() => setGuideOpen(true)} aria-label={isVi ? 'Hỏi BART' : 'Ask BART'}><FollowMascot /><span className="mono">{isVi ? 'Hỏi mình nhé' : 'Ask me anything'}</span></button></div>
         <footer className="story-footer"><Link href="/" className="wordmark"> <img src={process.env.NODE_ENV === "production" ? "/web-portfolio/assets/logo.svg" : "/assets/logo.svg"} alt="BART" style={{ height: "32px", width: "auto" }} /> </Link><Link href="/#project-index"><ArrowLeft size={15} /> {isVi ? 'Tất cả dự án' : 'All projects'}</Link><span className="mono">Portfolio / 2026</span></footer>
       </div>
     </section>
     <nav className="chapter-nav" aria-label="Project chapters">{chapters.map((chapter, index) => <button key={chapter.id} onClick={() => goTo(index)} aria-label={`Go to ${chapter.label}`} aria-current={active === index ? 'location' : undefined}><span>{isVi && chapter.label_vi ? chapter.label_vi : chapter.label}</span><i /></button>)}</nav>
-    <motion.div className="story-guide" animate={reduced ? { x: '88vw', y: '25vh' } : { x: anchor.x, y: anchor.y }} transition={reduced ? { duration: 0 } : { type: 'spring', stiffness: 52, damping: 15 }}>
-      <button onClick={() => goTo(Math.min(active + 1, chapters.length - 1))} aria-label={`Continue`}><span className="guide-bubble">{isVi && chapters[active].hint_vi ? chapters[active].hint_vi : chapters[active].hint}</span><span><FollowMascot anchorX={typeof anchor.x === "number" ? anchor.x : 0} /></span></button>
+    <motion.div className={`story-guide ${tourStatus === 'manual' ? '' : 'is-touring'}`} animate={reduced ? { x: '88vw', y: '25vh' } : { x: anchor.x, y: anchor.y }} transition={reduced ? { duration: 0 } : { type: 'spring', stiffness: 52, damping: 15 }}>
+      <button onClick={() => { if (tourStatus === 'tour' || tourStatus === 'intro') { if (tourStep === TOUR_STOPS.length - 1) setTourStatus('manual'); else { setTourStatus('tour'); setTourStep(step => step + 1); } } else setGuideOpen(true); }} aria-label={tourStatus === 'manual' ? (isVi ? 'Hỏi BART về dự án' : 'Ask BART about this project') : (isVi ? 'Điểm dừng tiếp theo' : 'Next tour stop')}><span className="guide-bubble">{tourStatus === 'intro' ? (isVi ? 'Mình dẫn bạn qua 3 điểm dừng. Sẵn sàng chưa?' : 'I’ll show you three quick stops. Ready?') : tourStatus === 'tour' ? (isVi ? `Điểm dừng ${tourStep + 1} / ${TOUR_STOPS.length} · Nhấn để tiếp tục` : `Stop ${tourStep + 1} / ${TOUR_STOPS.length} · Tap to continue`) : (isVi ? 'Nhấn để hỏi mình về dự án.' : 'Tap me for quick answers.')}</span><span><FollowMascot anchorX={typeof anchor.x === "number" ? anchor.x : 0} /></span></button>
     </motion.div>
     <div className="story-utilities"><span className="reading-count mono">{String(percent).padStart(3, '0')} / 100</span><MotionToggle /></div>
+    {(tourStatus === 'intro' || tourStatus === 'tour') && <div className="tour-controls"><span className="mono">{isVi ? 'BART đang dẫn đường' : 'BART is guiding'} · 0{tourStep + 1} / 0{TOUR_STOPS.length}</span><button type="button" onClick={() => setTourStatus('manual')}>ESC · {isVi ? 'Thoát tour' : 'Exit tour'}</button></div>}
+    {tourStatus === 'paused' && <div className="tour-interruption" role="presentation"><div ref={pauseCard} className="tour-interruption-card" role="dialog" aria-modal="true" aria-labelledby="tour-interruption-title" onKeyDown={event => { if (event.key === 'Escape') setTourStatus('manual'); if (event.key === 'Tab') { const buttons = pauseCard.current?.querySelectorAll('button'); if (!buttons?.length) return; if (event.shiftKey && document.activeElement === buttons[0]) { event.preventDefault(); buttons[buttons.length - 1].focus(); } else if (!event.shiftKey && document.activeElement === buttons[buttons.length - 1]) { event.preventDefault(); buttons[0].focus(); } } }}><span className="mono">BART / {isVi ? 'Quyền điều khiển' : 'Your call'}</span><h2 id="tour-interruption-title">{isVi ? 'BART đang dẫn tour.' : 'BART is mid-tour.'}</h2><p>{isVi ? 'Bạn muốn tự cuộn? Tour sẽ dừng và quyền điều khiển trở lại với bạn.' : 'Want to scroll on your own? That ends the tour and hands you the wheel.'}</p><button className="tour-stop" type="button" onClick={() => setTourStatus('manual')}>{isVi ? 'Dừng tour — để tôi tự cuộn' : 'Stop the tour — I’ll scroll'} <span>{pauseCountdown}</span></button><button className="tour-resume" type="button" onClick={() => setTourStatus('tour')}>{isVi ? 'Tiếp tục tour' : 'Keep riding'}</button></div></div>}
     <dialog className="art-dialog" ref={dialog} onCancel={() => setArtOpen(null)} onClick={event => { if (event.target === event.currentTarget) setArtOpen(null); }} aria-label={`${project.name} artwork preview`}>
       <button className="dialog-close" onClick={() => setArtOpen(null)} aria-label="Close artwork preview"><X size={24} /></button>{artOpen && <><ProjectImage image={artOpen} sizes="95vw" /><div className="dialog-caption"><p className="mono">{artOpen.alt}</p><a href={artOpen.src} target="_blank" rel="noreferrer">Open full image ↗</a></div></>}
     </dialog>
+    <GuideDialog open={guideOpen} onClose={() => setGuideOpen(false)} project={project} />
   </main>;
 }

@@ -51,6 +51,6 @@ export default function AboutSection() {
         <span className="mono">0{index + 1}</span><div><h3>{isVi && principle.title_vi ? principle.title_vi : principle.title}</h3><p>{isVi && principle.description_vi ? principle.description_vi : principle.description}</p></div>
       </motion.div>)}
     </div>
-    <div className="about-bottom"><span className="mono">{isVi ? 'Ý tưởng' : 'Idea'} <span aria-hidden="true">→</span> {isVi ? 'Hình ảnh' : 'Image'} <span aria-hidden="true">→</span> {isVi ? 'Cảm xúc' : 'Feeling'}</span><a href="#project-index">{isVi ? 'Bây giờ, khám phá tác phẩm' : 'Now, into the work'} <span className="about-work-arrow"><ArrowDown size={20} /></span></a></div>
+    <div className="about-bottom"><span className="mono">{isVi ? 'Ý tưởng' : 'Idea'} <span aria-hidden="true">→</span> {isVi ? 'Hình ảnh' : 'Image'} <span aria-hidden="true">→</span> {isVi ? 'Cảm xúc' : 'Feeling'}</span><a href="#contact">{isVi ? 'Cùng tạo câu chuyện tiếp theo' : 'Let’s make the next story'} <span className="about-work-arrow"><ArrowDown size={20} /></span></a></div>
   </section>;
 }
