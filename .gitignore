@@ -1,35 +1,39 @@
-# dependencies
-/node_modules
+# Local-only workspace folders (never publish to GitHub)
+.agents/
+Guideline/
+Design_Assets/
+Xoa_file/
+docs/
+
+# Dependencies
+node_modules/
+Develop/node_modules/
 /.pnp
 .pnp.js
 
-# testing
+# Testing
 /coverage
+Develop/coverage/
 
-# next.js
+# Next.js & build outputs
 /.next/
+Develop/.next/
+/.next-production/
+Develop/.next-production/
 /out/
-
-# production
+Develop/out/
 /build
+Develop/build/
+*.tsbuildinfo
 
-# misc
+# Misc & OS
 .DS_Store
 *.pem
-
-# debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-# local env files
 .env*.local
-
-# vercel
+Develop/.env*.local
 .vercel
-
-# temporary and raw files
-.next-production/
 tmp/
 translate-*.js
-Project IMG Port/
