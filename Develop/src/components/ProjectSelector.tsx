@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type MouseEvent } from 'react';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowDown, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -27,7 +27,6 @@ export default function ProjectSelector() {
   const [guideOpen, setGuideOpen] = useState(false);
 
   const project = projects[selected];
-  const projectTheme = { '--project-accent': project.accent } as CSSProperties;
 
   const handleProjectClick = (event: MouseEvent<HTMLAnchorElement>, slug: string) => {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -87,7 +86,7 @@ export default function ProjectSelector() {
       <a className="skip-link" href="#project-picker">
         {isVi ? 'Nhảy đến dự án' : 'Skip to projects'}
       </a>
-      <section className="project-lobby" aria-label={isVi ? 'Chọn một dự án' : 'Choose a project'} style={projectTheme}>
+      <section className="project-lobby" aria-label={isVi ? 'Chọn một dự án' : 'Choose a project'} data-project={project.slug}>
         <header className="lobby-header">
           <Link href="/" className="wordmark" aria-label="BART home">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -151,7 +150,7 @@ export default function ProjectSelector() {
                 href={`/projects/${project.slug}`}
                 onClick={(event) => handleProjectClick(event, project.slug)}
                 aria-label={`${isVi ? 'Bắt đầu câu chuyện' : 'Start the story'} ${project.name}`}
-                style={{ '--card-accent': project.accent } as CSSProperties}
+                data-project={project.slug}
               >
                 <ProjectImage image={project.cover} priority sizes="(max-width: 700px) 65vw, 400px" />
                 <span className="preview-glyph">
@@ -251,7 +250,7 @@ export default function ProjectSelector() {
                 handleProjectClick(event, item.slug);
               }}
             >
-              <div className="index-art" style={{ '--card-accent': item.accent } as CSSProperties}>
+              <div className="index-art" data-project={item.slug}>
                 <ProjectImage image={item.cover} priority={selected === index} sizes="(max-width: 700px) 88vw, 43vw" />
                 <span className="index-open">
                   <ArrowUpRight size={24} />

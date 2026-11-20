@@ -45,6 +45,16 @@
   --target-size: 44px;
 }
 
+[data-project='nestle-ptit'] { --project-accent: #b8e7f1; --card-accent: #b8e7f1; }
+[data-project='milo-erun'] { --project-accent: #168344; --card-accent: #168344; }
+[data-project='skinology'] { --project-accent: #f4c58d; --card-accent: #f4c58d; }
+[data-project='ecommerce'] { --project-accent: #68b7e5; --card-accent: #68b7e5; }
+[data-project='amazon'] { --project-accent: #b4c6be; --card-accent: #b4c6be; }
+[data-project='gerber'] { --project-accent: #16a4ce; --card-accent: #16a4ce; }
+[data-project='maggi'] { --project-accent: #f3db21; --card-accent: #f3db21; }
+[data-project='ganh-hoi'] { --project-accent: #b5b68a; --card-accent: #b5b68a; }
+
+
 * {
   box-sizing: border-box;
 }
